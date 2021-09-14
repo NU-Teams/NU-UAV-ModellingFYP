@@ -2,14 +2,17 @@ function [x_cg, Mass, Vt, alt, config_str] = configuration()
 
 %% Setup
 
-kts = 1.944;
-ft = 3.2808399;
+% unit conversions
+kts = 1.944;    % m/s to knots
+ft = 3.2808399; % m to ft
 
 %% Prompt User for Configuration
+config_str_title = "\nconfiguration()";
 config_str1 = "\n1: 100knots w Trainee";
 config_str2 = "\n2: 100knots w/o Trainee";
 config_str3 = "\n3: 300knots w Trainee";
 config_str4 = "\n4: 300knots w/o Trainee";
+fprintf(config_str_title)
 fprintf(config_str1) 
 fprintf(config_str2) 
 fprintf(config_str3) 

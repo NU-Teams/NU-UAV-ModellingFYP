@@ -31,12 +31,14 @@
 % Inga, Ash, Jason  07/05/2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [X_output, U_output] = Trim(VT, h, FD)
+
+kts = 1.944;
 %% Initialisation 
 
 % Find the Equilibrium Point at the appropriate local 0-point
-if VT >= 200/1.944
+if VT >= 200/kts
     alpha_0 = (pi/180)*3;   % Initial alpha assumption for high speed
-elseif VT < 200/1.944
+elseif VT < 200/kts
     alpha_0 = (pi/180)*9;   % Initial alpha assumption so low speed
 end 
 

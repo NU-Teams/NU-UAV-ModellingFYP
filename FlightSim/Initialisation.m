@@ -23,12 +23,10 @@ function [ FD ] = Initialisation(x_cg, mass)
 % Assuming Similar Mass distribution to the PC/9, ratio of inertias given
 % by: AC_mass_PC21/AC_mass_PC9 
 Mratio = 2650/2087;
-% Ratio of wing spans to better estimate Ixx
-WSratio = 9.11/10.19;
-% Ratio of body lengths to better estimate Iyy
-BLratio = 11.23/10.18;
-%ratio of airfcraft heights to better estimate Izz
-HLratio = 3.75/3.26;
+WSratio = 9.11/10.19;   % Ratio of wing spans to better estimate Ixx
+BLratio = 11.23/10.18;  % Ratio of body lengths to better estimate Iyy
+HLratio = 3.75/3.26;    % Ratio of airfcraft heights to better estimate Izz
+
 % Ixz is a product of inertia
 
 % --> Inertia_PC21 = Mratio*OtherRatio*Inertia_PC9
@@ -56,13 +54,13 @@ FD.Prop.eta = 0.8;                          % Propeller efficiency
 DtoR = pi/180;
 
 FD.CtrlLim.Lwr = [0;            % Throttle range (Fraction)
-                                  -25*DtoR;     % Elevator range (rad)
-                                  -25*DtoR;     % Aileron range (rad)
-                                  -25*DtoR];    % Rudder range (rad)
+                  -25*DtoR;     % Elevator range (rad)
+                  -25*DtoR;     % Aileron range (rad)
+                  -25*DtoR];    % Rudder range (rad)
 FD.CtrlLim.Upr = [1;            % Throttle range (Fraction)
-                                  25*DtoR;      % Elevator range (rad)
-                                  25*DtoR;      % Aileron range (rad)
-                                  25*DtoR];     % Rudder range (rad)
+                  25*DtoR;      % Elevator range (rad)
+                  25*DtoR;      % Aileron range (rad)
+                  25*DtoR];     % Rudder range (rad)
 
 %% Aerodynamic Data 
 
@@ -115,10 +113,11 @@ FD.Aero.Cldr =  0.0302*0.8;     % Ratio for rudder to vertical tail area, scaled
 
 
 
-%% UPDATE: Change Data for Centre of Gravity
-% The general x_cg coefficients.
+%% Change Data for Centre of Gravity
 % The numbers here came from the published solutions to AERO3000 Ass.2
- 
+
+% TODO: Find how the non-dimensional coefficients change w.r.t. change in a
+% centre of gravity.
 
     FD.Inertia.x_cg = x_cg;
     FD.Inertia.m = mass;

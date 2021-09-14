@@ -1,7 +1,3 @@
-%%
-% 
-%  
-% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AERO3000 Assignment 4 - Linearised Flight Simulator
 % Jason Iredale
@@ -10,21 +6,25 @@
 % Martin Shannon
 % June 2021
 % 
+% NU UAV Flight Simulator
+% Shane Pomfrett
+% Jason Iredale
+% September 2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Setup
 clear
 close all
 clc
 
-addpath("linear");
-addpath("nonlinear");
+addpath("LinearDynamics");
+addpath("NonLinearDynamics");
 
 T_final = 10;
 timeStep = 0.01;
 T = 0:timeStep:T_final;
 
 %% Configuration
-%Print Config Info
+% Print Config Info
 [x_cg, mass, Vt, alt, config_str] = configuration();
 
 % Initilise PC-21 Flight data
