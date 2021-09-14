@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% U, U_impulse, question] = Controls(X_in, U_in, T, FD)
+% [U, U_impulse, question_str] = Controls(X_in, U_in, T, FD)
 % Inputs
 %   X_k is a state vector at a certain time step.
 %   X_manouevre = the required state that question 5 or 6 asks to keep

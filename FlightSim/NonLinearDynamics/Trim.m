@@ -33,13 +33,14 @@
 function [X_output, U_output] = Trim(VT, h, FD)
 
 kts = 1.944;
+deg = 180/pi;
 %% Initialisation 
 
 % Find the Equilibrium Point at the appropriate local 0-point
 if VT >= 200/kts
-    alpha_0 = (pi/180)*3;   % Initial alpha assumption for high speed
+    alpha_0 = 3/deg;    % Initial alpha assumption for high speed
 elseif VT < 200/kts
-    alpha_0 = (pi/180)*9;   % Initial alpha assumption so low speed
+    alpha_0 = 9/deg;    % Initial alpha assumption so low speed
 end 
 
 % Assume a elevator and thrust delta
@@ -173,9 +174,8 @@ x_dot(:,k+1) = StateRates(X(:,k), U(:,k), zeros(13,1), FD);
 xbar_dot(:,k+1) = [x_dot(1,k+1) x_dot(3,k+1) x_dot(5,k+1)]';
 
 %% DEBUG: plot x_dot = f(x)
-% is the slope is positive it is unstable and we likely have done something
-% wrong
-
+% This is the Jacobian of the Newton-Rhapson Method. It looks cool when it
+% is not working.
 %{
 c = 1:k+1;
 

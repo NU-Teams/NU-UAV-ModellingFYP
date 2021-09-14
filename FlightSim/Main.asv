@@ -65,14 +65,22 @@ FD = Initialisation(x_cg, mass);
 
 % Find the Initial Conditions
 X0 = Xbar;
-% Linear Dynamics
-[X_lin, X_dot_lin] = Integration(T, X0, 'both',  U, FD);
-% Non-Linear Integration
+
+[X_lin, X_dot_lin]      = Integration(T, X0, 'both',  U, FD);
+
+
+%% Non-Linear Integration
+
 [X_nl, X_dot_nl] = Integrate(X0, U, T, FD);
 
 %% Plot States
 
-Figures = PlotData(T, X_lin', X_nl');
+% EA_lin = Q2E(X_lin);
+% X_long_lin = [X_lin(1,:); X_lin(3,:); X_lin(5,:); EA_lin(2,:); X_lin(13,:)];
+
+%Figure_states = TimeSeriesPlots(T, X_lat, X_long, config_str, manoeuvre_str);
+figures1 = PlotStates(T, X_nl, X_lin, "long", config_str, manoeuvre_str);
+figures2 = PlotStates(T, X_nl, X_lin, "lat", config_str, manoeuvre_str);
 
 %% Save Data
 

@@ -1,10 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% [JacobA, JacobB] = Long(X_bar, U_bar, x_cg)
-% Finds the longitudinal Jacobian of states [u w q theta z] and returns the
-% A and B Matrix for linear dynamics.
-% This only works for rectilinear steady-level flight (as i used theta
-% algebraically).
-%
+% [JacobA, JacobB] = Linearise(X_bar, U_bar, FD)
+% Numerically Linearises the dynamics.
 % CALLED FUNCTIONS:
 % StateRates
 %
