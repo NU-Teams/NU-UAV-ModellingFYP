@@ -25,7 +25,7 @@ colour3 = ['or', 'om', 'og', 'ob', 'ok'];
 % ax.YAxisLocation = 'origin';
 
 
-for coln = [1:5]
+for coln = (1:5)
     figure('Name','Argand Diagram')
 %     subplot(2,1,1)
     title_str = [AXIS ' Argand Diagram ' num2str(coln)];
@@ -44,7 +44,7 @@ for coln = [1:5]
     xlim([-max_range, max_range]);
     ylim([-max_range, max_range]);
     
-    for row = [1:5]
+    for row = (1:5)
 
         lambda = E(coln, coln);
         ic = V(row,coln);

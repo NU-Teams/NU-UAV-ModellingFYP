@@ -29,7 +29,6 @@ T = 0:timeStep:T_final;
 
 % Initilise PC-21 Flight data
 FD = Initialisation(x_cg, mass);
-%FD = PC9_Flight_Data_2021();
 
 % Find the Trim States
 [Xbar, Ubar] = Trim(Vt, alt, FD);
@@ -40,24 +39,20 @@ FD = Initialisation(x_cg, mass);
 
 %% Eigen Analysis
 
-[FD.A, FD.B]            = Linearise(Xbar, U(:,1), FD);
+[FD.A, FD.B] = Linearise(Xbar, Ubar, FD);
 
-[~, ~, A_Long_5, B_Long_5] = LongMatrixDecouple(FD.A, FD.B);
-[~, ~, A_Lat_5, B_Lat_5] = LatMatrixDecouple(FD.A, FD.B, Xbar);
+[~, ~, FD.Long.A, FD.Long.B] = LongMatrixDecouple(FD.A, FD.B);
+[~, ~, FD.Lat.A, FD.Lat.B] = LatMatrixDecouple(FD.A, FD.B, Xbar);
 
-%for each config & axis:
     %   compute eig vals/vectors of matrix A (eig and damp)
-    [V_long,E_long,Wn_long,zeta_long] = eig_analysis(A_Long_5);
-    [V_lat,E_lat,Wn_lat,zeta_lat] = eig_analysis(A_Lat_5);
+    %[V,E,Wn,zeta] = eig_analysis(FD);
 
-
-%% Plotting
 % eigenvectors and eigenvalues
-%PlotStability(T, FD, 'long')
-%PlotStability(T, FD, 'lat')
+PlotStability(T, FD, 'long')
+PlotStability(T, FD, 'lat')
 
 % Mil-Spec
-%[MilSpecFigure, load_alpha] = PlotMilSpec(FD, Vt);
+[MilSpecFigure, load_alpha] = PlotMilSpec(FD, Vt);
 
 
 %% Linear Integration for Time Response Analysis
@@ -65,33 +60,16 @@ FD = Initialisation(x_cg, mass);
 
 % Find the Initial Conditions
 X0 = Xbar;
-
-[X_lin, X_dot_lin]      = Integration(T, X0, 'both',  U, FD);
-
-
-%% Non-Linear Integration
-
+% Linear Dynamics
+[X_lin, X_dot_lin] = Integration(T, X0, U, FD);
+% Non-Linear Integration
 [X_nl, X_dot_nl] = Integrate(X0, U, T, FD);
 
 %% Plot States
 
-% EA_lin = Q2E(X_lin);
-% X_long_lin = [X_lin(1,:); X_lin(3,:); X_lin(5,:); EA_lin(2,:); X_lin(13,:)];
+Figures = PlotData(T, X_lin, X_nl);
 
-%Figure_states = TimeSeriesPlots(T, X_lat, X_long, config_str, manoeuvre_str);
-figures1 = PlotStates(T, X_nl, X_lin, "long", config_str, manoeuvre_str);
-figures2 = PlotStates(T, X_nl, X_lin, "lat", config_str, manoeuvre_str);
-
-%% Save Data
-
-% A_long = FD.Long.A;
-% B_long = FD.Long.B;
-% A_lat = FD.Lat.A;
-% B_lat = FD.Lat.B;
-% 
-% [EgnVector_long, EgnValue_long, Wn_long, zeta_long] = eig_analysis(FD.Long.A);
-% [EgnVector_lat , EgnValue_lat , Wn_lat , zeta_lat] = eig_analysis(FD.Lat.A);
-% 
+%% Save Data 
 % 
 % save('data\temp\A_long.mat', 'A_long')
 % save('data\temp\B_long.mat', 'B_long')

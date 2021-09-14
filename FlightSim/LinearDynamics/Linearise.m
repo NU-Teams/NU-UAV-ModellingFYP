@@ -56,31 +56,4 @@ for stateB = 1:4
     JacobB(:,stateB) = (X_dot_nudge - X_dot) ./ (U_nudge(stateB) - U_bar(stateB));
 end
 
-% T_A_13to5 = [1 0 0 0 0 0 0 0 0 0 0 0 0;
-%              0 0 1 0 0 0 0 0 0 0 0 0 0;
-%              0 0 0 0 1 0 0 0 0 0 0 0 0;
-%              0 0 0 0 0 0 0 0 0 0 0 0 0;
-%              0 0 0 0 0 0 0 0 0 0 0 0 1];
-% 
-% A_long = T_A_13to5*JacobA*(T_A_13to5');
-% A_long(4,3) = 1;
-% A_long(1,4) = -FD.Inertia.g;
-% 
-% T_A_10to5 = [1 0 0 0 0 0 0 0 0 0;
-%              0 0 1 0 0 0 0 0 0 0;
-%              0 0 0 0 1 0 0 0 0 0;
-%              0 0 0 0 0 0 0 1 0 0;
-%              0 0 0 0 0 0 0 0 0 1];
-% 
-% A_10 = (T_A_10to5')*A_long*T_A_10to5;
-% 
-% T_B_4to2 = [1 0;
-%             0 1;
-%             0 0;
-%             0 0];
-% 
-% B_long = T_A_13to5*JacobB*T_B_4to2;
-% 
-% B_10 = (T_A_13to5')*B_long*(T_B_4to2');
-
 end

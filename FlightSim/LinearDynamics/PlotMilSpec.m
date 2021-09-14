@@ -19,7 +19,7 @@ hold off
 Q = 0.5*1.206*Vt^2;
 dn_dalpha = FD.Aero.CLa*Q*FD.Geom.S/(FD.Inertia.m*FD.Inertia.g);
 
-figure('Name','Milspec2');
+Figures(2) = figure('Name','Milspec2');
 loglog(logspace(0,2), logspace(-0.523,0.447), 'k', 'LineWIdth', 1.5);
 title_str = ['MilSpec: Short Period'];
 title(title_str)

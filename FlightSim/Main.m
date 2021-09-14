@@ -19,7 +19,7 @@ clc
 addpath("LinearDynamics");
 addpath("NonLinearDynamics");
 
-T_final = 10;
+T_final = 30;
 timeStep = 0.01;
 T = 0:timeStep:T_final;
 
@@ -29,7 +29,6 @@ T = 0:timeStep:T_final;
 
 % Initilise PC-21 Flight data
 FD = Initialisation(x_cg, mass);
-%FD = PC9_Flight_Data_2021();
 
 % Find the Trim States
 [Xbar, Ubar] = Trim(Vt, alt, FD);
@@ -40,24 +39,20 @@ FD = Initialisation(x_cg, mass);
 
 %% Eigen Analysis
 
-[FD.A, FD.B]            = Linearise(Xbar, U(:,1), FD);
+[FD.A, FD.B] = Linearise(Xbar, Ubar, FD);
 
-[~, ~, A_Long_5, B_Long_5] = LongMatrixDecouple(FD.A, FD.B);
-[~, ~, A_Lat_5, B_Lat_5] = LatMatrixDecouple(FD.A, FD.B, Xbar);
+[~, ~, FD.Long.A, FD.Long.B] = LongMatrixDecouple(FD.A, FD.B);
+[~, ~, FD.Lat.A, FD.Lat.B] = LatMatrixDecouple(FD.A, FD.B, Xbar);
 
-%for each config & axis:
-    %   compute eig vals/vectors of matrix A (eig and damp)
-    [V_long,E_long,Wn_long,zeta_long] = eig_analysis(A_Long_5);
-    [V_lat,E_lat,Wn_lat,zeta_lat] = eig_analysis(A_Lat_5);
+% compute eig vals/vectors of matrix A (eig and damp)
+[V,E,Wn,zeta] = eig_analysis(FD.A);
 
-
-%% Plotting
 % eigenvectors and eigenvalues
-%PlotStability(T, FD, 'long')
-%PlotStability(T, FD, 'lat')
+PlotStability(T, FD, 'long')
+PlotStability(T, FD, 'lat')
 
 % Mil-Spec
-%[MilSpecFigure, load_alpha] = PlotMilSpec(FD, Vt);
+[MilSpecFigure, load_alpha] = PlotMilSpec(FD, Vt);
 
 
 %% Linear Integration for Time Response Analysis
@@ -66,24 +61,16 @@ FD = Initialisation(x_cg, mass);
 % Find the Initial Conditions
 X0 = Xbar;
 % Linear Dynamics
-[X_lin, X_dot_lin] = Integration(T, X0, 'both',  U, FD);
+[X_lin, X_dot_lin] = Integration(T, X0, U, FD);
 % Non-Linear Integration
 [X_nl, X_dot_nl] = Integrate(X0, U, T, FD);
 
 %% Plot States
 
-Figures = PlotData(T, X_lin', X_nl');
+Figures = PlotData(T, X_lin, X_nl);
 
-%% Save Data
 
-% A_long = FD.Long.A;
-% B_long = FD.Long.B;
-% A_lat = FD.Lat.A;
-% B_lat = FD.Lat.B;
-% 
-% [EgnVector_long, EgnValue_long, Wn_long, zeta_long] = eig_analysis(FD.Long.A);
-% [EgnVector_lat , EgnValue_lat , Wn_lat , zeta_lat] = eig_analysis(FD.Lat.A);
-% 
+%% Save Data 
 % 
 % save('data\temp\A_long.mat', 'A_long')
 % save('data\temp\B_long.mat', 'B_long')
