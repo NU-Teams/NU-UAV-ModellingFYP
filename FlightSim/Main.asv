@@ -19,7 +19,7 @@ clc
 addpath("LinearDynamics");
 addpath("NonLinearDynamics");
 
-T_final = 10;
+T_final = 30;
 timeStep = 0.01;
 T = 0:timeStep:T_final;
 
@@ -44,8 +44,8 @@ FD = Initialisation(x_cg, mass);
 [~, ~, FD.Long.A, FD.Long.B] = LongMatrixDecouple(FD.A, FD.B);
 [~, ~, FD.Lat.A, FD.Lat.B] = LatMatrixDecouple(FD.A, FD.B, Xbar);
 
-    %   compute eig vals/vectors of matrix A (eig and damp)
-    %[V,E,Wn,zeta] = eig_analysis(FD);
+% compute eig vals/vectors of matrix A (eig and damp)
+[V,E,Wn,zeta] = eig_analysis(FD.A);
 
 % eigenvectors and eigenvalues
 PlotStability(T, FD, 'long')
@@ -69,6 +69,7 @@ X0 = Xbar;
 
 Figures = PlotData(T, X_lin, X_nl);
 
+
 %% Save Data 
 % 
 % save('data\temp\A_long.mat', 'A_long')
@@ -87,4 +88,8 @@ Figures = PlotData(T, X_lin, X_nl);
 % 
 % save('data\temp\load_alpha.mat', 'load_alpha')
 % saveas(Figure_states, 'figures\temp\response.svg')
+
+
+a = 1
+b =
 
