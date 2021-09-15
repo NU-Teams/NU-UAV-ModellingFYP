@@ -1,0 +1,1 @@
+function Outputs = MotorDynamics(inputs)
