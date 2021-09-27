@@ -54,11 +54,26 @@ for i = 2:length(T)
     quaternion = X(7:10,i) + x0(7:10);
     X(7:10,i) = quaternion/norm(quaternion) - x0(7:10);
     
+    % Fix the x state not integrating the offset values
+    X(11:12,i) = X(11:12,i) + (x0(1:2)-FD.VW_e(1:2))*h;
+    
     % Log the differentials
     X_dot(:,i) = (X(:,i) - X(:,i-1))/h;
 end
     
 % Move back to Equilibrium point
 X = X + x0.*ones(length(X(:,1)), length(X(1,:)));
+
+% Apppend VT, alpha and beta to the sttes array
+[V,alpha,beta] = AeroAngles(X);
+X(14,:) = V;
+X(15,:) = beta;
+X(16,:) = alpha;
+
+% Append the Euler Angles
+EUL = Q2E(X);
+X(17,:) = EUL(1,:);
+X(18,:) = EUL(2,:);
+X(19,:) = EUL(3,:);
 
 end 

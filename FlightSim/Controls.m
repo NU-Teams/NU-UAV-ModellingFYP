@@ -55,7 +55,7 @@ U = U_in.*ones(4,length(T));
 U_impulse = U_in;
 
 % Declare the delay of the impulse
-T_delay = 1;
+T_delay = 10;
 
 %% Manoeuvre Selection
 if question == 0

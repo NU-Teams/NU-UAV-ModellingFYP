@@ -126,10 +126,10 @@ m = FD.Inertia.m;
     q3_dot = -(1/2)*(q2*p-q1*q-q0*r);
 
 %% 3 positional components 
-    pos = Ceb*[u; v; w];
-    x_e_dot = pos(1); % velocity in the north-heading (LVLH) [m/s]
-    y_e_dot = pos(2); % velocity in the east-heading (LVLH) [m/s]
-    z_e_dot = pos(3); % velocity in the altitude (LVLH) [m/s]
+    position_dot = Ceb*[u; v; w];
+    x_e_dot = position_dot(1) - FD.VW_e(1); % velocity in the north-heading (LVLH) [m/s]
+    y_e_dot = position_dot(2) - FD.VW_e(2); % velocity in the east-heading (LVLH) [m/s]
+    z_e_dot = position_dot(3) - FD.VW_e(3); % velocity in the altitude (LVLH) [m/s]
 %% STATE RATES VECTOR
     X_dot = [u_dot; % X_dot(1)
              v_dot; % X_dot(2)

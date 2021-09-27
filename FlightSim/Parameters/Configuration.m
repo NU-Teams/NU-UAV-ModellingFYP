@@ -1,4 +1,4 @@
-function [x_cg, Mass, Vt, alt, config_str] = configuration()
+function [x_cg, Mass, Vt, alt, config_str] = Configuration()
 
 %% Setup
 
@@ -27,22 +27,22 @@ config = input(prompt);
 if config == 1
     %   Inga - 100knots w Trainee
     x_cg    = 0.2922;
-    Mass    = 2650+110;
-    Vt      = 100/kts;
+    Mass    = 2650 + 110;
+    Vt      = [100; 0; 0]/kts;
     alt     = -500/ft; 
     config_str = 'x_cg = 29.22 %, W = 2760 kg, V_T = 100 kts, alt = 500 ft';
 elseif config == 2
     %   Ash - 100knots w/o Trainee
     x_cg    = 0.265;
     Mass    = 2650;
-    Vt      = 100/kts;
+    Vt      = [100; 0; 0]/kts;
     alt     = -500/ft; 
     config_str = 'x_cg = 26.50 %, W = 2650 kg, V_T = 100 kts, alt = 500 ft';
 elseif config == 3
     %   Jason - 300knots w Trainee
     x_cg = 0.2922;
-    Mass = 2650+110;
-    Vt = 300/kts;
+    Mass = 2650 + 110;
+    Vt = [300; 0; 0]/kts;
     alt = -500/ft; 
     config_str = 'x_cg = 29.22 %, W = 2760 kg, V_T = 300 kts, alt = 500 ft';
 elseif config == 4
@@ -51,7 +51,7 @@ elseif config == 4
     % Initialising Independant Vars
     x_cg = 0.265;
     Mass = 2650;
-    Vt = 300/kts;
+    Vt = [300; 0; 0]/kts;
     alt = -500/ft;   
     config_str = 'x_cg = 26.50 %, W = 2760 kg, V_T = 100 kts, alt = 500 ft';
 else

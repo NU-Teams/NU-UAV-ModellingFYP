@@ -13,9 +13,10 @@ function [V,alpha,beta] = AeroAngles(X_k)
     u = X_k(1,:); 
     v = X_k(2,:); 
     w = X_k(3,:); 
+    
 % Relative Wind/True Airspeed 
-    term = u.^2 + v.^2 + w.^2; 
-    V = sqrt(term); 
+    V = sqrt(u.^2 + v.^2 + w.^2); 
+    
 % AoA
     alpha = atan(w./u); 
 

@@ -81,12 +81,10 @@ x_dot = zeros(length(X(:,1)),max_approx_attempts);
           
     func_lateral = @(beta) (matrix^-1)*((-beta)*[FD.Aero.Cyb; FD.Aero.Clb; FD.Aero.Cnb]);
     
-    %soln_0 = func_lateral(beta_0);
-    %delta_a_0 = soln_0(2);
-    %delta_r_0 = soln_0(3);
-
+    soln_0 = func_lateral(beta_0);
+    delta_a_0 = soln_
     
-xlon(:,1) = [alpha_0; delta_T_0; delta_e_0];
+xlon(:,1) = [alpha_0; beta_0; delta_T_0; delta_e_0; delta_a_0; delta_r_0];
 
 %% Prep for the While loop
 % Initialise the amount of perturbation of the states to get a slope
@@ -107,11 +105,9 @@ while error>=tol
     
     % Unpack
     alpha   = xlon(1,k);
+    beta    = beta_0;
     delta_T = xlon(2,k);
     delta_e = xlon(3,k);
-
-    beta = beta_0;
-    
     
     % Define the obvious parts of the state and input vector
     
@@ -149,11 +145,11 @@ while error>=tol
     % Solve the Dynamic Equation
     x_dot(:,k) = StateRates(X(:,k), U(:,k), zeros(13,1), FD);
     
-    xLon_dot(:,k) = (x_dot([1 3 5], k))';
+    xLon_dot(:,k) = (x_dot([1 3 5],k))';
     
 %% step 4: Finding the Jacobian
     
-    Jacob = zeros(3, 3);
+    Jacob = zeros(3,3);
     
     for state = 1:3
         
@@ -172,7 +168,7 @@ while error>=tol
         
         U_nudge(1) = xLon_nudge(2);          % delta_T
         U_nudge(2) = xLon_nudge(3);          % delta_e
-
+        
         
         % Dynamics Equation
         x_dot_nudge = StateRates(X_nudge, U_nudge, zeros(13, 1), FD);
@@ -207,7 +203,7 @@ end
 
 % For completeness
 x_dot(:,k+1) = StateRates(X(:,k), U(:,k), zeros(13,1), FD);
-xLon_dot(:,k+1) = (x_dot([1 3 5], k+1))';
+xLon_dot(:,k+1) = (x_dot([1 3 5],k+1))';
 
 
 

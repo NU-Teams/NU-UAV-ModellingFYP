@@ -18,20 +18,20 @@ clc
 
 addpath("LinearDynamics");
 addpath("NonLinearDynamics");
+addpath("Parameters");
 
-T_final = 30;
+T_final = 180;
 timeStep = 0.01;
 T = 0:timeStep:T_final;
 
+
 %% Configuration
-% Print Config Info
-[x_cg, mass, Vt, alt, config_str] = configuration();
 
 % Initilise PC-21 Flight data
-FD = Initialisation(x_cg, mass);
+[FD, config_str] = Initialisation();
 
 % Find the Trim States
-[Xbar, Ubar] = Trim(Vt, alt, FD);
+[Xbar, Ubar] = Trim(FD);
 
 % Generate the Input Array
 [U, U_impulse, manoeuvre_str] = Controls(Xbar, Ubar, T, FD);
@@ -48,26 +48,29 @@ FD = Initialisation(x_cg, mass);
 [V,E,Wn,zeta] = eig_analysis(FD.A);
 
 % eigenvectors and eigenvalues
-PlotStability(T, FD, 'long')
-PlotStability(T, FD, 'lat')
+    %PlotStability(T, FD, 'long')
+    %PlotStability(T, FD, 'lat')
 
 % Mil-Spec
-[MilSpecFigure, load_alpha] = PlotMilSpec(FD, Vt);
+    %[MilSpecFigure, load_alpha] = PlotMilSpec(FD, Vt);
 
 
 %% Linear Integration for Time Response Analysis
 % linearize equilibrium states and inputs
 
-% Find the Initial Conditions
+% Establish the Initial Conditions
 X0 = Xbar;
+
 % Linear Dynamics
 [X_lin, X_dot_lin] = Integration(T, X0, U, FD);
+
 % Non-Linear Integration
 [X_nl, X_dot_nl] = Integrate(X0, U, T, FD);
 
+
 %% Plot States
 
-Figures = PlotData(T, X_lin, X_nl);
+Figures = PlotData(T, X_lin, X_nl, U);
 
 
 %% Save Data 
@@ -90,7 +93,4 @@ Figures = PlotData(T, X_lin, X_nl);
 % saveas(Figure_states, 'figures\temp\response.svg')
 
 
-a = 1
-b = 2
-disp('helloWorld!')
 

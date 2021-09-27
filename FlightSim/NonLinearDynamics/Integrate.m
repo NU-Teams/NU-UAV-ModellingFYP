@@ -33,15 +33,10 @@ for k = 2:length(T)
     % Find the time-step
     DT = T(k)-T(k-1);
     
-    % Magnitude of the quaternions
+    % Magnitude of the quaternions, and normlising them
     q_mag(k-1) = sqrt(X(7,k-1).^2 + X(8,k-1).^2 + X(9,k-1).^2 + X(10,k-1).^2);
-    
-    % Normalising the quaternions
-    X(7,k-1) = X(7,k-1)/q_mag(k-1);      % q0
-    X(8,k-1) = X(8,k-1)/q_mag(k-1);      % q1
-    X(9,k-1) = X(9,k-1)/q_mag(k-1);      % q2
-    X(10,k-1) = X(10,k-1)/q_mag(k-1);    % q3
-    
+    X(7:10,k-1) = X(7:10,k-1)/q_mag(k-1);
+
     % RK4 Terms
     
     %X_dot = zeros(13,1);
@@ -59,10 +54,21 @@ end
     
 % Normalise Magnitude of the final quaternion
 q_mag(k) = sqrt(X(7,k-1).^2 + X(8,k-1).^2 + X(9,k-1).^2 + X(10,k-1).^2);
+X(7:10,k) = X(7:10,k-1)/q_mag(k);
 
-X(7,k) = X(7,k-1)/q_mag(k);
-X(8,k) = X(8,k-1)/q_mag(k);
-X(9,k) = X(9,k-1)/q_mag(k);
-X(10,k) = X(10,k-1)/q_mag(k);
+% Apppend VT, alpha and beta to the states array
+[V,alpha,beta] = AeroAngles(X);
+X(14,:) = V;
+X(15,:) = beta;
+X(16,:) = alpha;
+
+% Append the Euler Angles
+EUL = Q2E(X);
+X(17,:) = EUL(1,:);
+X(18,:) = EUL(2,:);
+X(19,:) = EUL(3,:);
+
+
+
 
 end
