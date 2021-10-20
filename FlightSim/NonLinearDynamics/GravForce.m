@@ -11,7 +11,7 @@ CosineMatrix = DCM(X_k);
 Cbe = CosineMatrix.Cbe;
 
 %   Multiplying the body toearth coefficient by the gravity force vector.
-GF = Cbe*[0,0,FD.Inertia.g]';
+GF = Cbe*[0; 0; FD.Inertia.g];
 
 end
 

@@ -1,4 +1,4 @@
-function Figures = PlotData(T, Xlin, Xnl, U)
+function Figures = PlotTransientResponse(T, Xlin, Xnl, U)
 % Units
 deg = 180/pi;   % rad to deg
 kts = 1.944;    % m/s to knots

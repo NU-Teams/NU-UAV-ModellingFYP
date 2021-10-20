@@ -35,12 +35,12 @@ F_x = FD.Prop.eta.*Power*(1/true_airspeed)*delta_T;
 F_y = 0;     % no thrust in the lateral axis
 F_z = 0;     % no thrust in the normal axis
 
-Force = [F_x F_y F_z];
+Force = [F_x; F_y; F_z];
 
 % Assuming the thrust is inline with the centre of gravity
 M_l = 0;
 M_m = 0;
 M_n = 0;
-Moment = [M_l M_m M_n];
+Moment = [M_l; M_m; M_n];
 
 end

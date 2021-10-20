@@ -50,11 +50,7 @@ CosineMatrix = DCM(X_k);
 Ceb = CosineMatrix.Ceb;
 
 % DONE: get gravity in terms of body ref. frame
-    % [g_x; g_y; g_z] = gravity(input) 
-    GF = GravForce(X_k, FD);
-    g_x = GF(1);
-    g_y = GF(2);
-    g_z = GF(3);
+GF_m = GravForce(X_k, FD);
     
 % DONE: aero_F & aero_M
 [aero_F, aero_M] = BodyForces(X_k, U_k, X_dot, FD);
@@ -64,6 +60,7 @@ Ceb = CosineMatrix.Ceb;
 
 % DONE: m
 m = FD.Inertia.m;
+
 
 %% initialisation of states & variables from input vectors
 
@@ -81,69 +78,95 @@ m = FD.Inertia.m;
     y_e = X_k(12);
     z_e = X_k(13);
     
-    F_A_x = aero_F(1);
-    F_A_y = aero_F(2);
-    F_A_z = aero_F(3);
-    F_T_x = propulsive_F(1);
-    F_T_y = propulsive_F(2);
-    F_T_z = propulsive_F(3);
+    velVector = [u; v; w];
+    pqrVector = [p; q; r];
+    quatVector = [q0; q1; q2; q3];
+    posVector = [x_e; y_e; z_e];
     
-    L_A = aero_M(1);
-    M_A = aero_M(2);
-    N_A = aero_M(3);
-    L_T = propulsive_M(1);
-    M_T = propulsive_M(2);
-    N_T = propulsive_M(3);
+    Forces_mVector = GF_m + (aero_F + propulsive_F)/m;
+    MomentVector = aero_M + propulsive_M;
+    
     
 %% inertial constants
+
+    % p_dot and q_dot
     C0 = FD.Inertia.Ixx*FD.Inertia.Izz - FD.Inertia.Ixz^2;
     C1 = FD.Inertia.Izz/C0;
     C2 = FD.Inertia.Ixz/C0;
     C3 = C2*(FD.Inertia.Ixx - FD.Inertia.Iyy + FD.Inertia.Izz);
     C4 = C1*(FD.Inertia.Iyy - FD.Inertia.Izz) - C2*FD.Inertia.Ixz;
+    C8 = FD.Inertia.Ixx/C0;
+    C9 = C8*(FD.Inertia.Ixx - FD.Inertia.Iyy) + C2*FD.Inertia.Ixz;
+    
+    % q_dot
     C5 = 1/FD.Inertia.Iyy;
     C6 = C5*FD.Inertia.Ixz;
     C7 = C5*(FD.Inertia.Izz - FD.Inertia.Ixx);
-    C8 = FD.Inertia.Ixx/C0;
-    C9 = C8*(FD.Inertia.Ixx - FD.Inertia.Iyy) + C2*FD.Inertia.Ixz;
 
 %% 3 velocities
     
-    u_dot = r*v - q*w + g_x + (F_A_x + F_T_x)/m;    % velocity in longitudinal axis (BODY) [m/s]
-    v_dot = -r*u + p*w + g_y + (F_A_y + F_T_y)/m;   % velocity in lateral axis (BODY) [m/s]
-    w_dot = q*u - p*v + g_z + (F_A_z + F_T_z)/m;    % velocity in normal (BODY) [m/s]
+    %{
+    u_dot =  r*v - q*w + g_x + (F_A_x + F_T_x)/m;    % velocity in longitudinal axis (BODY) [m/s]
+    v_dot = -r*u + p*w + g_y + (F_A_y + F_T_y)/m;    % velocity in lateral axis (BODY) [m/s]
+    w_dot =  q*u - p*v + g_z + (F_A_z + F_T_z)/m;    % velocity in normal (BODY) [m/s]
+    %}
+    
+    vel_pqrMatrix = [ 0  r -q;
+                     -r  0  p;
+                      q -p  0];
+                  
+    vel_dot = vel_pqrMatrix*velVector + Forces_mVector;
     
 %% 3 rotation rates
-    p_dot = C3*p*q + C4*q*r + C1*(L_A + L_T) + C2*(N_A + N_T);  % change in roll-rate [rads/s^2]
-    q_dot = C7*p*r - C6*(p^2 - r^2) + C5*(M_A + M_T);           % change in pitch-rate [rads/s^2]
-    r_dot = C9*p*q - C3*q*r + C2*(L_A + L_T) + C8*(N_A + N_T);  % change is yaw-rate [rads/s^2]
 
+    %{
+    p_dot = C3*p*q + C4*q*r       + C1*(L_A+L_T) + C2*(N_A+N_T);	% change in roll-rate [rads/s^2]
+    q_dot = C7*p*r - C6*(p^2-r^2) + C5*(M_A+M_T);                   % change in pitch-rate [rads/s^2]
+    r_dot = C9*p*q - C3*q*r       + C2*(L_A+L_T) + C8*(N_A+N_T);    % change is yaw-rate [rads/s^2]
+    %}
+    
+    coupledpqrMatrix = [C3 0  C4  0 ;
+                        0  C7 0  -C6;
+                        C9 0 -C3  0 ];
+    coupledpqrVector = [p*q; p*r; q*r; p^2-r^2];
+   
+    MomentMatrix = [C1 0  C2;
+                    0  C5 0 ;
+                    C2 0  C8];
+    
+    pqr_dot = coupledpqrMatrix*coupledpqrVector + MomentMatrix*MomentVector;
+    
 %% 4 attitude rates (using quarternions)
-    % NOTE: there are 3 when in terms of Euler Angles 
-    q0_dot = -(1/2)*(q1*p+q2*q+q3*r);
-    q1_dot = (1/2)*(q0*p-q3*q+q2*r);
-    q2_dot = (1/2)*(q3*p+q0*q-q1*r);
-    q3_dot = -(1/2)*(q2*p-q1*q-q0*r);
-
+    
+    %{
+    q0_dot = -(1/2)*(q1*p + q2*q + q3*r);
+    q1_dot =  (1/2)*(q0*p - q3*q + q2*r);
+    q2_dot =  (1/2)*(q3*p + q0*q - q1*r);
+    q3_dot = -(1/2)*(q2*p - q1*q - q0*r);
+    %}
+    
+    quat_pqrMatrix = (1/2)*[0 -p -q -r;
+                            p  0  r -q;
+                            q -r  0  p;
+                            r  q -p  0];
+    
+    quat_dot = quat_pqrMatrix*quatVector;
+    
 %% 3 positional components 
-    position_dot = Ceb*[u; v; w];
+
+    position_e_dot = Ceb*velVector - FD.VW_e;
+    
+    %{
     x_e_dot = position_dot(1) - FD.VW_e(1); % velocity in the north-heading (LVLH) [m/s]
     y_e_dot = position_dot(2) - FD.VW_e(2); % velocity in the east-heading (LVLH) [m/s]
     z_e_dot = position_dot(3) - FD.VW_e(3); % velocity in the altitude (LVLH) [m/s]
+    %}
+    
 %% STATE RATES VECTOR
-    X_dot = [u_dot; % X_dot(1)
-             v_dot; % X_dot(2)
-             w_dot; % X_dot(3)
-             p_dot; % X_dot(4)
-             q_dot; % X_dot(5)
-             r_dot; % X_dot(6)
-             q0_dot; % X_dot(7)
-             q1_dot; % X_dot(8)
-             q2_dot; % X_dot(9)
-             q3_dot; % X_dot(10)
-             x_e_dot; % X_dot(11)
-             y_e_dot; % X_dot(12)
-             z_e_dot]; % X_dot(13)
+    X_dot = [vel_dot;
+             pqr_dot;
+             quat_dot;
+             position_e_dot];
 
 end
 

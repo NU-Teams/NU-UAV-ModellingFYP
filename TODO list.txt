@@ -1,0 +1,27 @@
+TODO List
+Bunch of updates I want to give the simulator to make it simpler, more versatile and accurate
+
+1) Revise all of the math and make sure there are no mistakes.
+	-> for some reason, the positions don't integrate properly in linear form. I think the equilibrium removes the velocity so the distance is integrating over 0.
+	->
+
+2) Clean up the parameters folder:
+	-> Use a pop up to enter in data and save configurations in a .mat file so re-running it will give you the prior config. This will replace the current config design that asks users to input a number in the command prompt.
+	-> Instead of re-running the FD strucutre, save it as a .mat specifically designated as the PC-21, and have the code import that. make a new function called something like FD_maker that allows users to save a new structure based on a new aircraft, and they can import any aircraft in the popup.
+	-> formalise the mh around the CoG data. right now it's based only on a specific aircraft and not generalised.
+	-> other ideas that make the parameters section simpler and more versatile.
+
+3) Combine C_x, C_y, C_z and DCM into a single function that can output any of these based on input {x, y, z, q}.
+	-> clear up the syntax for different reference frames. maybe make a description at the top of the function to clear this up.
+	-> this includes Cba in the nonLinear folder
+
+4) Add legends to the 'PlotTransientResponse' function, as well as two axes; SI units and standard aviation units.
+
+5) change the AeroAngles function to 'Cart2Sphere', and make it applicable to distances as well as velocities.
+
+6) add a subscript of reference frame to any ambiguous variables, suc as u,v,w,x,y,z.
+
+7) Change the non-linear dynamics to output [d(V) d(beta) d(alpha)] instead of [d(u) d(v) d(w)]. note this should agree with the theory as it assumes V ~=u. Establish a theoretical marix to verify the numerical Newton-Rhapson approach.
+
+8) Implement wind as a constant disturbence and windgusts as a time-dependent disturbance.
+

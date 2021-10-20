@@ -118,16 +118,16 @@ delta_r = U_k(4); % Rudder Deflection
 %% OUTPUTS
 
     % Moments
-    % Do moments care about reference frames?
-        Body_Moments = [M_L,M_M,M_N]';
-        Body_Moments = [M_L,M_M,M_N]';
+    % moments do not care about reference frames?
+        Body_Moments = [M_L; M_M; M_N];
+        
     % Forces
         % Matrix
-            Force_Matrix = [-F_D F_Y -F_L]';
+            Stability_Forces = [-F_D; F_Y; -F_L];
         % Body Transformation
-        % TODO: turn this into a transform from the stability axis to the
+        % DONE: turn this into a transform from the stability axis to the
         % body axis
-            Body_Forces = Cbs*Force_Matrix;
+            Body_Forces = Cbs*Stability_Forces;
 
 
 end 

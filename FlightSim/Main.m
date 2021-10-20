@@ -70,7 +70,7 @@ X0 = Xbar;
 
 %% Plot States
 
-Figures = PlotData(T, X_lin, X_nl, U);
+Figures = PlotTransientResponse(T, X_lin, X_nl, U);
 
 
 %% Save Data 
