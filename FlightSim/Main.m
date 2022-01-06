@@ -29,7 +29,7 @@ addpath("Output");
 addpath("Output\data");
 addpath("Output\figures");
 
-T_final = 60;
+T_final = 10;
 timeStep = 0.01;
 T = 0:timeStep:T_final;
 
@@ -100,6 +100,4 @@ Figures = PlotTransientResponse(T, X_lin, X_nl, U);
 % 
 % save('Output\data\temp\load_alpha.mat', 'load_alpha')
 % saveas(Figure_states, 'Output\figures\temp\response.svg')
-
-
 

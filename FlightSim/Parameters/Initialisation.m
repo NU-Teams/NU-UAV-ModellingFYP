@@ -5,7 +5,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [aircraft, enviro, config_str] = Initialisation()
+function [aircraft, environment, config_str] = Initialisation()
+
+
 
 
 
@@ -20,10 +22,10 @@ aircraft.VG_e     = VG;
 aircraft.bearing  = atan(aircraft.VG_e(2)./aircraft.VG_e(1));
 
 
-enviro.fluid = AirFlowParameters();
+environment.fluid = AirFlowParameters();
 
 
-aircraft.VW_e     = enviro.fluid.windSpeed*[cos(enviro.fluid.windBearing); sin(enviro.fluid.windBearing); 0];
+aircraft.VW_e     = environment.fluid.windSpeed*[cos(environment.fluid.windBearing); sin(environment.fluid.windBearing); 0];
 
 aircraft.VT_e = aircraft.VG_e + aircraft.VW_e;
 aircraft.VT = norm(aircraft.VT_e);
