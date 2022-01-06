@@ -22,20 +22,9 @@
 % Jason Iredale (updated for assignment 4) 27/5/2021 1916
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [U, U_impulse, question_str] = Controls(X_in, U_in, T, FD)
-%% Prompt for Manoeuvre
-
-% Print manouevres to command window
-manouevre_str0 = '\n0: Trim';
-manouevre_str1 = '\n1: elevator Impulse \n2: aileron Impulse \n3: rudder Impulse';
-% manouevre_str2 = '\n4: 3g loop \n5: Steady-Heading Side-Slip \n6: 4-pt. hesitation roll';
-fprintf([manouevre_str0 manouevre_str1])
 
 % Prompt the User to pick a manouevre
-prompt = '\nWhat manoeuvre (0 - 3) do you want to simulate? \n';
-
-% Prompt the User to pick a manouevre
-question = input(prompt);
-
+manoeuvre = FD.manoeuvre;
 
 %% Initial Calculations
 
@@ -58,14 +47,14 @@ U_impulse = U_in;
 T_delay = 10;
 
 %% Manoeuvre Selection
-if question == 0
+if manoeuvre == 0
     % Manoeuvre 0: Trim Case
 
     T_impulse = 0;
     % Do nothing
     question_str = 'Trimmed';
     
-elseif question == 1
+elseif manoeuvre == 1
     % Manoeuvre 1: Elevator Deflection
     
     % 5 deg elevator impulse
@@ -74,7 +63,7 @@ elseif question == 1
     T_impulse = 0.5;
     question_str = 'Elevator Impulse';
     
-elseif question == 2
+elseif manoeuvre == 2
     % Manoeuvre 2: Aileron Deflection
     
     % 5 deg aileron impulse
@@ -84,7 +73,7 @@ elseif question == 2
     T_impulse = 0.5;
     question_str = 'Aileron Impulse';
     
-elseif question == 3
+elseif manoeuvre == 3
     % Manoeuvre 3: Rudder Deflection
 
     % 5 deg rudder impulse

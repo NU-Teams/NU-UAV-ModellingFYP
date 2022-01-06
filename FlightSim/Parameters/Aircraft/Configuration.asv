@@ -7,31 +7,31 @@ kts = 1.944;    % m/s to knots
 ft = 3.2808399; % m to ft
 
 %% Prompt User for Configuration
-config_str_title = "\nconfiguration()";
-config_str1 = "\n1: 100knots w Trainee";
-config_str2 = "\n2: 100knots w/o Trainee";
-config_str3 = "\n3: 300knots w Trainee";
-config_str4 = "\n4: 300knots w/o Trainee";
-fprintf(config_str_title)
-fprintf(config_str1) 
-fprintf(config_str2) 
-fprintf(config_str3) 
-fprintf(config_str4)
 
-%Prompt Config
-prompt = "\n What Configuraation Would you like to use? (1-4)\n";
-% Recieve config from Command Window
-config = input(prompt);
 
+[userSpeed, userTrainee] = choosedialog();
+
+Vt = userSpeed/kts;
+
+
+a=1
 %% Find the Parameters for the Configuration
-if config == 1
+if userTrainee == 1
     %   Inga - 100knots w Trainee
     x_cg    = 0.2922;
     Mass    = 2650 + 110;
     Vt      = [100; 0; 0]/kts;
     alt     = -500/ft; 
-    config_str = 'x_cg = 29.22 %, W = 2760 kg, V_T = 100 kts, alt = 500 ft';
-elseif config == 2
+    
+    if userSpeed == 100
+        Vt      = [100; 0; 0]/kts;
+        config_str = 'x_cg = 29.22 %, W = 2760 kg, V_T = 100 kts, alt = 500 ft';
+    elseif userSpeed == 300
+        Vt      = [300; 0; 0]/kts;
+        config_str = 'x_cg = 29.22 %, W = 2760 kg, V_T = 300 kts, alt = 500 ft';
+    end
+    
+elseif userTrainee == 1
     %   Ash - 100knots w/o Trainee
     x_cg    = 0.265;
     Mass    = 2650;

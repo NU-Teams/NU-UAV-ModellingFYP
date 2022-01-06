@@ -10,7 +10,7 @@
 %
 % Jason Iredale 27/05/2021 1904
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [JacobA, JacobB] = Long(X_bar, U_bar, FD)
+function [JacobA, JacobB] = LongitudinalDynamics_Numerical(X_bar, U_bar, FD)
 %% Initialisation 
 
 % bulk of the longitudinal states. Theta won't be passed because it's hard

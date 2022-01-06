@@ -7,22 +7,28 @@
 
 function [aircraft, enviro, config_str] = Initialisation()
 
+% Units
+kts = 1.944;
+deg = 180/pi;
 
 
-[x_cg, mass, VG, alt, config_str, manoeuvre] = Configuration();
+
+[x_cg, mass, VG, alt, config_str] = Configuration();
+
 
 aircraft = AircraftParameters(x_cg, mass);
 
+
 aircraft.x_cg = x_cg;
 aircraft.alt = alt;
-aircraft.manoeuvre = manoeuvre;
+
 aircraft.VG_e     = VG;
 aircraft.bearing  = atan(aircraft.VG_e(2)./aircraft.VG_e(1));
 
-
 enviro.fluid = AirFlowParameters();
 
-
+windSpeed   = 0/kts;
+windBearing = 20/deg;   % A northernly wind is 0 degrees
 aircraft.VW_e     = enviro.fluid.windSpeed*[cos(enviro.fluid.windBearing); sin(enviro.fluid.windBearing); 0];
 
 aircraft.VT_e = aircraft.VG_e + aircraft.VW_e;

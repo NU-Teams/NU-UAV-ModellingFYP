@@ -29,9 +29,11 @@
 % Jason Iredale    28/05/2021 2000
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [X, X_dot] = Integration(T, x0, U, FD)
+function [X, X_dot] = IntegrateLinearDynamics(T, x0, U, FD)
 
 % Define first arugument of the answer as the intial conditions
+
+X_dot = zeros(13,length(T));
 
 X_tilde = zeros(13,1);
 U_tilde = U - U(:,1).*ones(4,length(T));
@@ -42,12 +44,12 @@ X(:,1)	= X_tilde;
 U       = U_tilde;
 
 for i = 2:length(T)
-    h = T(i) - T(i-1);
+    DT = T(i) - T(i-1);
 
-    f1 = h*LinearDynamics(X(:,i-1),         U(:,i-1), A, B); 
-    f2 = h*LinearDynamics(X(:,i-1)+0.5*f1,  U(:,i-1), A, B); 
-    f3 = h*LinearDynamics(X(:,i-1)+0.5*f2,  U(:,i-1), A, B); 
-    f4 = h*LinearDynamics(X(:,i-1)+f3,      U(:,i-1), A, B); 
+    f1 = DT*LinearDynamics(X(:,i-1),         U(:,i-1), A, B); 
+    f2 = DT*LinearDynamics(X(:,i-1)+0.5*f1,  U(:,i-1), A, B); 
+    f3 = DT*LinearDynamics(X(:,i-1)+0.5*f2,  U(:,i-1), A, B); 
+    f4 = DT*LinearDynamics(X(:,i-1)+f3,      U(:,i-1), A, B); 
     X(:,i) = X(:,i-1) + (1/6)*(f1 + 2*f2 + 2*f3 + f4);
     
     % Normalise the quaternions
@@ -55,10 +57,10 @@ for i = 2:length(T)
     X(7:10,i) = quaternion/norm(quaternion) - x0(7:10);
     
     % Fix the x state not integrating the offset values
-    X(11:12,i) = X(11:12,i) + (x0(1:2)-FD.VW_e(1:2))*h;
+    X(11:12,i) = X(11:12,i) + (x0(1:2)-FD.VW_e(1:2))*DT;
     
     % Log the differentials
-    X_dot(:,i) = (X(:,i) - X(:,i-1))/h;
+    X_dot(:,i) = (X(:,i) - X(:,i-1))/DT;
 end
     
 % Move back to Equilibrium point

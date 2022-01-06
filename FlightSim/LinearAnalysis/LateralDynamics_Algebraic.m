@@ -1,4 +1,4 @@
-function [A_lat,B_lat] = Lat(FD, xbar)
+function [A_lat,B_lat] = LateralDynamics_Algebraic(FD, xbar)
 %LATERAL MATRICES LINEARISED
 %   Marty, Inga 25/05/2021
 %   Marty       27/05/2021

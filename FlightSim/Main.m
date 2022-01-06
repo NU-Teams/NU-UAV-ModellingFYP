@@ -16,11 +16,20 @@ clear
 close all
 clc
 
-addpath("LinearDynamics");
-addpath("NonLinearDynamics");
 addpath("Parameters");
+addpath("Parameters\Aircraft");
+addpath("Parameters\Environment");
 
-T_final = 180;
+addpath("CoordinateTransformation");
+addpath("Dynamics");
+addpath("Forces");
+addpath("LinearAnalysis");
+
+addpath("Output");
+addpath("Output\data");
+addpath("Output\figures");
+
+T_final = 60;
 timeStep = 0.01;
 T = 0:timeStep:T_final;
 
@@ -28,7 +37,7 @@ T = 0:timeStep:T_final;
 %% Configuration
 
 % Initilise PC-21 Flight data
-[FD, config_str] = Initialisation();
+[FD, enviro, config_str] = Initialisation();
 
 % Find the Trim States
 [Xbar, Ubar] = Trim(FD);
@@ -62,10 +71,10 @@ T = 0:timeStep:T_final;
 X0 = Xbar;
 
 % Linear Dynamics
-[X_lin, X_dot_lin] = Integration(T, X0, U, FD);
+[X_lin, X_dot_lin] = IntegrateLinearDynamics(T, X0, U, FD);
 
 % Non-Linear Integration
-[X_nl, X_dot_nl] = Integrate(X0, U, T, FD);
+[X_nl, X_dot_nl] = IntegrateDynamics(X0, U, T, FD);
 
 
 %% Plot States
@@ -75,22 +84,22 @@ Figures = PlotTransientResponse(T, X_lin, X_nl, U);
 
 %% Save Data 
 % 
-% save('data\temp\A_long.mat', 'A_long')
-% save('data\temp\B_long.mat', 'B_long')
-% save('data\temp\EgnVector_long.mat', 'EgnVector_long')
-% save('data\temp\EgnValue_long.mat', 'EgnValue_long')
-% save('data\temp\Wn_long.mat', 'Wn_long')
-% save('data\temp\zeta_long.mat', 'zeta_long')
+% save('Output\data\temp\A_long.mat', 'A_long')
+% save('Output\data\temp\B_long.mat', 'B_long')
+% save('Output\data\temp\EgnVector_long.mat', 'EgnVector_long')
+% save('Output\data\temp\EgnValue_long.mat', 'EgnValue_long')
+% save('Output\data\temp\Wn_long.mat', 'Wn_long')
+% save('Output\data\temp\zeta_long.mat', 'zeta_long')
 % 
-% save('data\temp\A_lat.mat.mat', 'A_lat')
-% save('data\temp\B_lat.mat.mat', 'B_lat')
-% save('data\temp\EgnVector_lat.mat', 'EgnVector_lat')
-% save('data\temp\EgnValue_lat.mat', 'EgnValue_lat')
-% save('data\temp\Wn_lat.mat', 'Wn_lat')
-% save('data\temp\zeta_lat.mat', 'zeta_lat')
+% save('Output\data\temp\A_lat.mat.mat', 'A_lat')
+% save('Output\data\temp\B_lat.mat.mat', 'B_lat')
+% save('Output\data\temp\EgnVector_lat.mat', 'EgnVector_lat')
+% save('Output\data\temp\EgnValue_lat.mat', 'EgnValue_lat')
+% save('Output\data\temp\Wn_lat.mat', 'Wn_lat')
+% save('Output\data\temp\zeta_lat.mat', 'zeta_lat')
 % 
-% save('data\temp\load_alpha.mat', 'load_alpha')
-% saveas(Figure_states, 'figures\temp\response.svg')
+% save('Output\data\temp\load_alpha.mat', 'load_alpha')
+% saveas(Figure_states, 'Output\figures\temp\response.svg')
 
 
 
