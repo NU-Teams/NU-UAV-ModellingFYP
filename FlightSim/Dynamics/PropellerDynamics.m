@@ -1,1 +1,0 @@
-function output = PropellerDynamics(inputs)

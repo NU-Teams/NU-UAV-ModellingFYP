@@ -12,7 +12,7 @@
 % Inga Leinasars, 02/05/2021 
 % Jason Iredale,  03/05/2021 0937
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function CosineMatrix = DCM(X_k)
+function C_be = DCM(X_k)
 %% CODE
 
 % Declaring the quaternions from the state variable
@@ -36,11 +36,9 @@ n2 = 2*(q2.*q3 - q0.*q1);
 n3 = q0.^2 - q1.^2 - q2.^2 + q3.^2;
 
 % The DCM that transforms from LVLH to BODY
-CosineMatrix.Cbe = [l1 l2 l3;...
-                    m1 m2 m3;...
-                    n1 n2 n3];
-
-% The DCM that transforms from BODY to LVLH
-CosineMatrix.Ceb = transpose(CosineMatrix.Cbe);        
+C_be = [l1 l2 l3;
+        m1 m2 m3;
+        n1 n2 n3];
+       
 
 end

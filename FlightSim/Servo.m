@@ -1,1 +1,0 @@
-function Output = Servo(input)

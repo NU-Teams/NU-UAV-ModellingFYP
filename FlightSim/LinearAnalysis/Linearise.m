@@ -1,12 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % [JacobA, JacobB] = Linearise(X_bar, U_bar, FD)
 % Numerically Linearises the dynamics.
-% CALLED FUNCTIONS:
-% StateRates
-%
-% Jason Iredale 27/05/2021 1904
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [JacobA, JacobB] = Linearise(X_bar, U_bar, FD)
+function [JacobA, JacobB] = Linearise(X_bar, U_bar, AIRCRAFT, ENVIRONMENT)
+
+
+CHI = Q2E(X_bar);
+
+X_bar_lin = [X_bar(1:3);
+             X_bar(4:6);
+             CHI;
+             X_bar(11:13)];
+         
 %% Initialisation 
 
 % Initialise the amount of perturbation of the states to get a slope
@@ -15,41 +20,41 @@ nudge_factor = 0.01;
 %% step 1: Solve x_dot
 
 % Solve the Dynamic Equation
-X_dot = StateRates(X_bar, U_bar, zeros(13,1), FD);
+X_dot = StateRates_linear(X_bar_lin, U_bar, zeros(12,1), AIRCRAFT, ENVIRONMENT);
 
 %% step 3: Finding the Jacobian
 
-JacobA = zeros(13, 13);
-JacobB = zeros(13, 4);
+JacobA = zeros(12, 12);
+JacobB = zeros(12, 4);
 
-for stateA = 1:13
+for stateA = 1:12
 
     % re-Initialise Variables
-    X_nudge = X_bar;
+    X_nudge = X_bar_lin;
     U_nudge = U_bar;
 
     % Perturb (ie nudge) the state
-    X_nudge(stateA) = X_bar(stateA) + nudge_factor;
+    X_nudge(stateA) = X_bar_lin(stateA) + nudge_factor;
 
     % Dynamics Equation
-    X_dot_nudge = StateRates(X_nudge, U_nudge, zeros(13, 1), FD);
+    X_dot_nudge = StateRates_linear(X_nudge, U_nudge, zeros(13, 1), AIRCRAFT, ENVIRONMENT);
 
     % The Jacobian is the slope of the x_dot = f(x) curve. This is done
     % numerically here
-    JacobA(:,stateA) = (X_dot_nudge - X_dot) ./ (X_nudge(stateA) - X_bar(stateA));
+    JacobA(:,stateA) = (X_dot_nudge - X_dot) ./ (X_nudge(stateA) - X_bar_lin(stateA));
 end
 
 for stateB = 1:4
 
     % re-Initialise Variables
-    X_nudge = X_bar;
+    X_nudge = X_bar_lin;
     U_nudge = U_bar;
 
     % Perturb (ie nudge) the state
     U_nudge(stateB) = U_bar(stateB) + nudge_factor;
 
     % Dynamics Equation
-    X_dot_nudge = StateRates(X_nudge, U_nudge, zeros(13, 1), FD);
+    X_dot_nudge = StateRates_linear(X_nudge, U_nudge, zeros(13, 1), AIRCRAFT, ENVIRONMENT);
 
     % The Jacobian is the slope of the x_dot = f(x) curve. This is done
     % numerically here

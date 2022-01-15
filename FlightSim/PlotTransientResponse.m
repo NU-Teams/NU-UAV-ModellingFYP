@@ -35,47 +35,41 @@ delta_r = U(4,:)*deg;
 
 %% Longitudinal Transient Response
 Figures(1) = figure('Name', 'Longitudinal Transient');
-    subplot(7, 1, 1)
+    subplot(6, 1, 1)
         hold on
         grid on
         plot(T, u, 'LineWidth', 1.5)
         ylabel('u')
         hold off
-    subplot(7, 1, 2)
+    subplot(6, 1, 2)
         hold on
         grid on
         plot(T, w, 'LineWidth', 1.5)
         ylabel('w')
         hold off
-    subplot(7, 1, 3)
+    subplot(6, 1, 3)
         hold on
         grid on
         plot(T, q, 'LineWidth', 1.5)
         ylabel('q')
         hold off
-    subplot(7, 1, 4)
+    subplot(6, 1, 4)
         hold on
         grid on
-        plot(T, q0, 'LineWidth', 1.5)
-        ylabel('q_0')
+        plot(T, theta, 'LineWidth', 1.5)
+        ylabel('Pitch, \theta [deg]')
         hold off
-    subplot(7, 1, 5)
-        hold on
-        grid on
-        plot(T, q2, 'LineWidth', 1.5)
-        ylabel('q_2')
-        hold off
-    subplot(7, 1, 6)
+    subplot(6, 1, 5)
         hold on
         grid on
         plot(T, x, 'LineWidth', 1.5)
-        ylabel('x')
+        ylabel('North, x [m]')
         hold off
-    subplot(7, 1, 7)
+    subplot(6, 1, 6)
         hold on
         grid on
         plot(T, z, 'LineWidth', 1.5)
-        ylabel('z')
+        ylabel('Altitude, z [m]')
         hold off
 
 
@@ -102,14 +96,14 @@ Figures(2) = figure('Name', 'Lateral Transient');
     subplot(6, 1, 4)
         hold on
         grid on
-        plot(T, q1, 'LineWidth', 1.5)
-        ylabel('q_1')
+        plot(T, phi, 'LineWidth', 1.5)
+        ylabel('Bank, \phi [deg]')
         hold off
     subplot(6, 1, 5)
         hold on
         grid on
-        plot(T, q3, 'LineWidth', 1.5)
-        ylabel('q_3')
+        plot(T, psi, 'LineWidth', 1.5)
+        ylabel('Yaw, \psi [deg]')
         hold off
     subplot(6, 1, 6)
         hold on
@@ -120,7 +114,7 @@ Figures(2) = figure('Name', 'Lateral Transient');
 
         
 %% AeroAngles Transient Response
-Figures(3) = figure('Name','AeroAngles Transent');
+Figures(3) = figure('Name','AeroAngles Transient');
     subplot(3, 1, 1)
         hold on
         grid on
@@ -140,31 +134,11 @@ Figures(3) = figure('Name','AeroAngles Transent');
         ylabel('\alpha [deg]')
         hold off
 
-%% Euler Angles
 
-Figures(3) = figure('Name','Euler Angles Transent');
-    subplot(3, 1, 1)
-        hold on
-        grid on
-        plot(T, phi, 'LineWidth', 1.5)
-        ylabel('\phi [deg]')
-        hold off
-    subplot(3, 1, 2)
-        hold on
-        grid on
-        plot(T, theta, 'LineWidth', 1.5)
-        ylabel('\theta [deg]')
-        hold off
-    subplot(3, 1, 3)
-        hold on
-        grid on
-        plot(T, psi, 'LineWidth', 1.5)
-        ylabel('\psi [deg]')
-        hold off
         
 %% Controls
 
-Figures(4) = figure('Name','Controls Transent');
+Figures(4) = figure('Name','Controls Transient');
     subplot(4, 1, 1)
         hold on
         grid on

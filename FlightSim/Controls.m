@@ -21,19 +21,26 @@
 % (updated) Inga Leinasars, Martin Shannon, Ashleigh Rattray, Jason Iredale
 % Jason Iredale (updated for assignment 4) 27/5/2021 1916
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [U, U_impulse, question_str] = Controls(X_in, U_in, T, FD)
+function [U, U_impulse] = Controls(X_in, U_in, T, AIRCRAFT, OPERATION, ENVIRONMENT)
 
-% Prompt the User to pick a manouevre
-manoeuvre = FD.manoeuvre;
+%% UNPACK
+
+g       = ENVIRONMENT.gravity;
+
+m       = AIRCRAFT.Inertia.m;
+S       = AIRCRAFT.Geom.S;
+
+operationName = OPERATION.name;
+
+
 
 %% Initial Calculations
 
 % U = [delta_T; delta_e; delta_a; delta_r];
 
-[density_ratio, Q] = FlowProperties(X_in);
-rho = density_ratio*1.225;
-W = FD.Inertia.g*FD.Inertia.m;
-CL = W/(Q*FD.Geom.S);
+[~, Q] = FlowProperties(X_in, ENVIRONMENT);
+W = g*m;
+CL = W/(Q*S);
 VT = sqrt(X_in(1)^2 + X_in(2)^2 + X_in(3)^2);
 
 % Use all this information to make an array of the function output U.
@@ -47,23 +54,21 @@ U_impulse = U_in;
 T_delay = 10;
 
 %% Manoeuvre Selection
-if manoeuvre == 0
+if strcmp(operationName, 'Trim')
     % Manoeuvre 0: Trim Case
 
     T_impulse = 0;
     % Do nothing
-    question_str = 'Trimmed';
     
-elseif manoeuvre == 1
+elseif strcmp(operationName, 'Elevator Impulse')
     % Manoeuvre 1: Elevator Deflection
     
     % 5 deg elevator impulse
     U_impulse(2) = 5*(pi/180) + U_in(2);
     % Declare the time-length of the impulse
     T_impulse = 0.5;
-    question_str = 'Elevator Impulse';
     
-elseif manoeuvre == 2
+elseif strcmp(operationName, 'Aileron Impulse')
     % Manoeuvre 2: Aileron Deflection
     
     % 5 deg aileron impulse
@@ -71,27 +76,27 @@ elseif manoeuvre == 2
 
     % Declare the time-length of the impulse
     T_impulse = 0.5;
-    question_str = 'Aileron Impulse';
     
-elseif manoeuvre == 3
+elseif strcmp(operationName, 'Rudder Impulse')
     % Manoeuvre 3: Rudder Deflection
 
     % 5 deg rudder impulse
     U_impulse(4) = 5*(pi/180);
     % Declare the time-length of the impulse
-    T_impulse = 0.5;
-    question_str = 'Rudder Impulse';
-    
+    T_impulse = 0.5;    
 
 else
     % Invalid User Response
-    disp('Controls.m : invalid question number')
+    error('Controls.m : invalid operation manouevre')
 end
+
 
 % Finds the element index of U during the impulse
 impulse_index = find((T>=T_delay).*(T<=T_delay+T_impulse));
+
 % finds the number of elements during the impulse
 impulse_size = sum((T>=T_delay).*(T<=T_delay+T_impulse));
+
 % Overwrite the impulse cotrols into the output array
 U(:,impulse_index) = U_impulse.*ones(4,impulse_size);
 

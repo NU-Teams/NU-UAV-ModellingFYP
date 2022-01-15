@@ -2,16 +2,20 @@
 % GF = GravForce(X_k)
 % Transforms the gravity vector from earth-frame to body-frame.
 %
-% Marty Shannon, 7/05/2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [GF] = GravForce(X_k, FD)
+function GF = GravForce(X_k, ENVIRONMENT)
+
+%% Unpack
+
+g = ENVIRONMENT.gravity;
 
 %   obtaining the body to earth coefficient.
-CosineMatrix = DCM(X_k);
-Cbe = CosineMatrix.Cbe;
+C_be = DCM(X_k);
 
 %   Multiplying the body toearth coefficient by the gravity force vector.
-GF = Cbe*[0; 0; FD.Inertia.g];
+GF = C_be*[0;
+           0;
+           g];
 
 end
 

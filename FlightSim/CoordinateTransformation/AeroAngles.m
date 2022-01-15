@@ -7,7 +7,7 @@
 
 % Ashleigh Rattray 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [V,alpha,beta] = AeroAngles(X_k)
+function [V, beta, alpha] = AeroAngles(X_k)
 
 % Separate Vector Components 
     u = X_k(1,:); 

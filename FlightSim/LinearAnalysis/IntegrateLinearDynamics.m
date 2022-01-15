@@ -8,74 +8,59 @@
 % function to calculate the aircraft's response to a control input.
 % Therefore this function assumes that the state rates functions have been
 % separated regarding axis. 
-
-% INPUTS
-% x0 = the 13x1 vector generated from the trim function
-% t = time vector
-% U = the control inputs [delta_T ; delta_e ; delta_a ; delta_r]
-% x_cg = the CoG for the scenario being assessed
-
-% FUNCTION CALLS 
-% Aero_Angles(x0) = calculates the initial alpha and beta needed for
-% integration
-% Q2E(x0) = calculates the initial euler angle positions needed for
-% specific axis integration/state rates equations. 
-
-% OUTPUTS
-
-
-% Ashleigh Rattray 25/05/2021 2205
-% Ashleigh Rattray 27/05/2021 1813
-% Jason Iredale    28/05/2021 2000
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [X, X_dot] = IntegrateLinearDynamics(T, x0, U, FD)
+function [X_lin, X_dot_lin] = IntegrateLinearDynamics(T, x0_13, U, AIRCRAFT, ENVIRONMENT)
+
+%% UNPACK
+
+VW_e = ENVIRONMENT.Wind.speed*[cos(ENVIRONMENT.Wind.bearing);
+                               sin(ENVIRONMENT.Wind.bearing);
+                               0];
+
 
 % Define first arugument of the answer as the intial conditions
 
-X_dot = zeros(13,length(T));
+CHI0                = Q2E(x0_13);
+x0_12               = [x0_13(1:3);
+                       x0_13(4:6);
+                       CHI0;
+                       x0_13(11:13)];
 
-X_tilde = zeros(13,1);
-U_tilde = U - U(:,1).*ones(4,length(T));
-A = FD.A;
-B = FD.B;
+X_dot_lin           = zeros(12,length(T));
 
-X(:,1)	= X_tilde;
-U       = U_tilde;
+X_tilde             = zeros(12,1);
+U_tilde             = U - U(:,1).*ones(4,length(T));
+A                   = AIRCRAFT.A;
+B                   = AIRCRAFT.B;
+
+X_lin(:,1)          = X_tilde;
+U                   = U_tilde;
 
 for i = 2:length(T)
     DT = T(i) - T(i-1);
 
-    f1 = DT*LinearDynamics(X(:,i-1),         U(:,i-1), A, B); 
-    f2 = DT*LinearDynamics(X(:,i-1)+0.5*f1,  U(:,i-1), A, B); 
-    f3 = DT*LinearDynamics(X(:,i-1)+0.5*f2,  U(:,i-1), A, B); 
-    f4 = DT*LinearDynamics(X(:,i-1)+f3,      U(:,i-1), A, B); 
-    X(:,i) = X(:,i-1) + (1/6)*(f1 + 2*f2 + 2*f3 + f4);
-    
-    % Normalise the quaternions
-    quaternion = X(7:10,i) + x0(7:10);
-    X(7:10,i) = quaternion/norm(quaternion) - x0(7:10);
+    f1 = DT*LinearDynamics(X_lin(:,i-1),         U(:,i-1), A, B); 
+    f2 = DT*LinearDynamics(X_lin(:,i-1)+0.5*f1,  U(:,i-1), A, B); 
+    f3 = DT*LinearDynamics(X_lin(:,i-1)+0.5*f2,  U(:,i-1), A, B); 
+    f4 = DT*LinearDynamics(X_lin(:,i-1)+f3,      U(:,i-1), A, B); 
+    X_lin(:,i) = X_lin(:,i-1) + (1/6)*(f1 + 2*f2 + 2*f3 + f4);
+
     
     % Fix the x state not integrating the offset values
-    X(11:12,i) = X(11:12,i) + (x0(1:2)-FD.VW_e(1:2))*DT;
+    X_lin(10:11,i)	= X_lin(10:11,i) + (x0_12(1:2)-VW_e(1:2))*DT;
     
     % Log the differentials
-    X_dot(:,i) = (X(:,i) - X(:,i-1))/DT;
+    X_dot_lin(:,i)	= (X_lin(:,i) - X_lin(:,i-1))/DT;
 end
     
 % Move back to Equilibrium point
-X = X + x0.*ones(length(X(:,1)), length(X(1,:)));
+X_lin = X_lin + x0_12.*ones(length(X_lin(:,1)), length(X_lin(1,:)));
 
-% Apppend VT, alpha and beta to the sttes array
-[V,alpha,beta] = AeroAngles(X);
-X(14,:) = V;
-X(15,:) = beta;
-X(16,:) = alpha;
-
-% Append the Euler Angles
-EUL = Q2E(X);
-X(17,:) = EUL(1,:);
-X(18,:) = EUL(2,:);
-X(19,:) = EUL(3,:);
+% Apppend VT, alpha and beta to the states array
+[VT, beta, alpha]   = AeroAngles(X_lin);
+X_lin(13,:)         = VT;
+X_lin(14,:)         = beta;
+X_lin(15,:)         = alpha;
 
 end 

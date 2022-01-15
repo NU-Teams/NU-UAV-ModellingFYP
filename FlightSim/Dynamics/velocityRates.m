@@ -1,35 +1,37 @@
-function vel_dot = velocityRates(X_k, U_k, X_dot, FD)
+function vel_dot = velocityRates(X_k, U_k, X_dot, AIRCRAFT, ENVIRONMENT)
 
+%% Unpack
+m = AIRCRAFT.Inertia.m;
 
 % DONE: get gravity in terms of body ref. frame
-GF_m = GravForce(X_k, FD);
+Grav_F = GravForce(X_k, ENVIRONMENT)*m;
     
 % DONE: aero_F & aero_M
-[aero_F, ~] = BodyForces(X_k, U_k, X_dot, FD);
+[Aero_F, ~] = BodyForces(X_k, U_k, X_dot, AIRCRAFT, ENVIRONMENT);
 
 % DONE: propulsive_F & propulsive_M
-[propulsive_F, ~] = PropForces(X_k, U_k, FD);
-
-% DONE: m
-m = FD.Inertia.m;
+[Prop_F, ~] = PropForces(X_k, U_k, AIRCRAFT, ENVIRONMENT);
 
 
 %% initialisation of states & variables from input vectors
 
-    u = X_k(1);
-    v = X_k(2);
-    w = X_k(3);
-    p = X_k(4);
-    q = X_k(5);
-    r = X_k(6);
+u = X_k(1);
+v = X_k(2);
+w = X_k(3);
+p = X_k(4);
+q = X_k(5);
+r = X_k(6);
 
-    
-    velVector = [u; v; w];
-    
-    Forces_mVector = GF_m + (aero_F + propulsive_F)/m;
-    
-    
+velocity  = [u;
+             v;
+             w];
 
+angularVel = [p;
+             q;
+             r];
+
+Forces = Grav_F + Aero_F + Prop_F;
+    
 
 %% 3 velocities
     
@@ -38,12 +40,8 @@ m = FD.Inertia.m;
     v_dot = -r*u + p*w + g_y + (F_A_y + F_T_y)/m;    % velocity in lateral axis (BODY) [m/s]
     w_dot =  q*u - p*v + g_z + (F_A_z + F_T_z)/m;    % velocity in normal (BODY) [m/s]
     %}
-    
-    vel_pqrMatrix = [ 0  r -q;
-                     -r  0  p;
-                      q -p  0];
-                  
-    vel_dot = vel_pqrMatrix*velVector + Forces_mVector;
+        
+    vel_dot = cross(velocity, angularVel) + Forces/m;
     
 
 end

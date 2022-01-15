@@ -1,0 +1,130 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="278853517" file="C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4\NU UAV - Flight Simulator.prj" location="C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4" name="NU UAV - Flight Simulator" target="target.mlapps" target-name="Package App">
+    <param.appname>NU UAV - Flight Simulator</param.appname>
+    <param.authnamewatermark>Jason Iredale</param.authnamewatermark>
+    <param.email />
+    <param.company>NU UAV</param.company>
+    <param.icon>${PROJECT_ROOT}\NU UAV - Flight Simulator_resources\icon_24.png</param.icon>
+    <param.icons>
+      <file>${PROJECT_ROOT}\NU UAV - Flight Simulator_resources\icon_48.png</file>
+      <file>${PROJECT_ROOT}\NU UAV - Flight Simulator_resources\icon_24.png</file>
+      <file>${PROJECT_ROOT}\NU UAV - Flight Simulator_resources\icon_16.png</file>
+    </param.icons>
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>${PROJECT_ROOT}\package</param.output>
+    <param.guid>c27fe5dc-ab8f-4914-bd41-90b8ef067478</param.guid>
+    <unset>
+      <param.email />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\app1.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\FlightSim\Controls.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\AeroAngles.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\C_y.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\DCM.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\E2Q.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\Q2E.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Dynamics\AngularRates.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Dynamics\quaternionRates.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Dynamics\rotationalVelocityRates.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Dynamics\StateRates.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Dynamics\velocityRates.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\FlowProperties.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Forces\BodyForces.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Forces\GravForce.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Forces\PropForces.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Forces\WindForces.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\IntegrateDynamics.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\eig_analysis.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\IntegrateLinearDynamics.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\LatMatrixDecouple.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\LinearDynamics.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\Linearise.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\LongMatrixDecouple.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\PlotMilSpec.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\PlotStability.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\Trim.m</file>
+      <file>${PROJECT_ROOT}\mainFunction.m</file>
+      <file>${PROJECT_ROOT}\savedFiles\temp\appParameters.mat</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}" name="package" optional="false">C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4\package</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2020b</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="gpucoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <gpucoder>
+          <enabled>true</enabled>
+        </gpucoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

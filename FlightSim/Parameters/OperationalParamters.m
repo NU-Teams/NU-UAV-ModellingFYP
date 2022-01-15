@@ -1,5 +1,0 @@
-function OperationalParamters()
-
-
-
-end
