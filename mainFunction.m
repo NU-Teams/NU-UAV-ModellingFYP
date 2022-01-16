@@ -1,7 +1,8 @@
 function output = mainFunction()
 
 % TODO (PropForces):
-%   implement user input for propulsion axes and distance from CoG
+%   implement user input for propulsion axes.
+%   add the initial ltitude and longitude coordinates to the app.
 
 %% Setup
 clear
@@ -20,8 +21,13 @@ addpath("FlightSim\Output\figures");
 
 addpath("FlightSim\Parameters");
 
+
+addpath("savedFiles");
+addpath("savedFiles\savedAircraft");
+addpath("savedFiles\Parameters");
 addpath("savedFiles\temp");
-%addpath("savedFiles\savedAircraft_ProfilePhotos");
+addpath("savedFiles\savedAircraft_ProfilePhotos");
+
 
 load("appParameters", 'aircraft', 'operation', 'environment', 'simulation');
 
@@ -86,27 +92,5 @@ output.LinearAnalysis.Stability     = Stability;
 
 output.MilSpec                      = MilSpec;
 
-%Figures = PlotTransientResponse(T, X_lin, X_nl, U);
 
-
-%% Save Data 
-% 
-% save('Output\data\temp\A_long.mat', 'A_long')
-% save('Output\data\temp\B_long.mat', 'B_long')
-% save('Output\data\temp\EgnVector_long.mat', 'EgnVector_long')
-% save('Output\data\temp\EgnValue_long.mat', 'EgnValue_long')
-% save('Output\data\temp\Wn_long.mat', 'Wn_long')
-% save('Output\data\temp\zeta_long.mat', 'zeta_long')
-% 
-% save('Output\data\temp\A_lat.mat.mat', 'A_lat')
-% save('Output\data\temp\B_lat.mat.mat', 'B_lat')
-% save('Output\data\temp\EgnVector_lat.mat', 'EgnVector_lat')
-% save('Output\data\temp\EgnValue_lat.mat', 'EgnValue_lat')
-% save('Output\data\temp\Wn_lat.mat', 'Wn_lat')
-% save('Output\data\temp\zeta_lat.mat', 'zeta_lat')
-% 
-% save('Output\data\temp\load_alpha.mat', 'load_alpha')
-% saveas(Figure_states, 'Output\figures\temp\response.svg')
-
-%}
 end

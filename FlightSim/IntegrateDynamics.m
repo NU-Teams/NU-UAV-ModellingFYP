@@ -25,6 +25,10 @@ X_dot               = zeros(13,length(T));
 
 X                   = zeros(13,length(T));
 
+% geo-coordinates data (todo: put the ic is the app.)
+geo(:, 1)           = [-32.890219*(pi/180); 151.702862*(pi/180); -X_initial(end)];
+R                   = 6371e+3;
+
 % Set the initial condition;
 X(:,1)              = X_initial;
 
@@ -50,20 +54,28 @@ for k = 2:length(T)
     X(:,k)          = X(:,k-1) + (1/6)*(f1+2*f2+2*f3+f4);
     
     X_dot(:,k)      = (X(:,k)-X(:,k-1))/DT;
+    
+    % EARTH coordinates - used for mapping (todo: make this a dynamic eqn?)
+    geo(3, k)       = -(X(end,   k) - X(end  , k-1))                                  + geo(3, k-1);
+    geo(1, k)       =  (X(end-2, k) - X(end-2, k-1))/( R + geo(3, k)                ) + geo(1, k-1);
+    geo(2, k)       =  (X(end-1, k) - X(end-1, k-1))/((R + geo(3, k))*cos(geo(1, k))) + geo(2, k-1);
 
 end
 
 % Apppend VT, alpha and beta to the states array
 [V, beta, alpha]	= AeroAngles(X);
+aerodynamicAngles   = [V; beta; alpha];
 
 % swap quaternions for euler angles
 EUL                 = Q2E(X);
 
-X_output = [X(1:3,:);
-            X(4:6,:);
-            EUL;
-            X(11:13,:);
-            V;
-            beta;
-            alpha];
+% latitude longitude coordinates
+geo(1:2, :)         = geo(1:2, :)*180/pi
+
+X_output = [X(1:3,:);           % body velocities
+            X(4:6,:);           % rotation rates
+            EUL;                % attitudes
+            X(11:13,:);         % position (LVLH)
+            aerodynamicAngles;  % different kind of velocities
+            geo];               % geo coordinates
 end
