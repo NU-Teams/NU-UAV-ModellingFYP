@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="4172571511" file="C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4\NU UAV Flight Simulator.prj" location="C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4" name="NU UAV Flight Simulator" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="933767488" file="C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4\NU UAV Flight Simulator.prj" location="C:\Users\ireda\Documents\Studies\University\NU\NU UAV\UAV-FlightSim_A4" name="NU UAV Flight Simulator" target="target.mlapps" target-name="Package App">
     <param.appname>NU UAV Flight Simulator</param.appname>
     <param.authnamewatermark>Jason Iredale</param.authnamewatermark>
     <param.email>jason.iredale@uonu.edu.au</param.email>
@@ -11,9 +11,17 @@
       <file>${PROJECT_ROOT}\NU UAV Flight Simulator_resources\icon_16.png</file>
     </param.icons>
     <param.summary />
-    <param.description />
+    <param.description>&lt;b&gt;1.03 update:&lt;/b&gt;
+&lt;ul&gt;&lt;li&gt;added the option to eport trajectory to as a kml file to view in google earth.&lt;/li&gt;&lt;/ul&gt;
+
+&lt;b&gt;1.02 update:&lt;/b&gt;
+&lt;ul&gt;&lt;li&gt;added latitude-longitude coordinate trajectory and (hopefully) fixed the directory problems (thankyou Josh Flynn :) )&lt;/li&gt;&lt;/ul&gt;
+
+&lt;b&gt;1.01 update:&lt;/b&gt;
+&lt;ul&gt;&lt;li&gt;first update,
+swapped the slashes in the addpath functions so it will hopefully work on linux.&lt;/li&gt;&lt;/ul&gt;</param.description>
     <param.screenshot />
-    <param.version>1.0</param.version>
+    <param.version>1.03</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -22,9 +30,7 @@
     <param.guid>b878f57c-081e-4652-aa2d-4f96492239ab</param.guid>
     <unset>
       <param.summary />
-      <param.description />
       <param.screenshot />
-      <param.version />
       <param.products.name />
       <param.products.id />
       <param.products.version />
@@ -35,7 +41,6 @@
       <file>${PROJECT_ROOT}\app1.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>${PROJECT_ROOT}\FlightSim\Controls.m</file>
       <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\AeroAngles.m</file>
       <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\air2body.m</file>
       <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\C_y.m</file>
@@ -44,6 +49,7 @@
       <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\E2Q.m</file>
       <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\Q2E.m</file>
       <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\stability2body.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\CoordinateTransformation\VincentyFormula.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Dynamics\AngularRates.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Dynamics\attitudeRates.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Dynamics\positionRates.m</file>
@@ -52,6 +58,7 @@
       <file>${PROJECT_ROOT}\FlightSim\Dynamics\StateRates.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Dynamics\StateRates_linear.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Dynamics\velocityRates.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\flashyGUI.m</file>
       <file>${PROJECT_ROOT}\FlightSim\FlowProperties.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Forces\BodyForces.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Forces\GravForce.m</file>
@@ -67,13 +74,27 @@
       <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\PlotMilSpec.m</file>
       <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\PlotStability.m</file>
       <file>${PROJECT_ROOT}\FlightSim\LinearAnalysis\semilogXcircle.m</file>
+      <file>${PROJECT_ROOT}\FlightSim\mainFunction.m</file>
       <file>${PROJECT_ROOT}\FlightSim\Trim.m</file>
-      <file>${PROJECT_ROOT}\mainFunction.m</file>
-      <file>${PROJECT_ROOT}\savedFiles\temp\appParameters.mat</file>
+      <file>${PROJECT_ROOT}\FlightSim\updateAnimation.m</file>
     </fileset.depfun>
     <fileset.resources>
       <file>${PROJECT_ROOT}\savedFiles\savedAircraft\Pilatus PC9.mat</file>
       <file>${PROJECT_ROOT}\savedFiles\savedAircraft_ProfilePhotos\1280px-Pilatus_PC-9_of_the_Irish_Air_Corp_flying_in_formation_5.jpg</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedControls\elevStep_05s.mat</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedControls\Trim.mat</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedKML\FlighhtSimKMLTest.kml</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\ac3d_xyzisrgb.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\blueoctagon.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\bluewedge.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\body_xyzisrgb.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\delta2.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\greenarrow.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\pa24-250_blue.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\pa24-250_orange.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\redwedge.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedModels\testrocket.ac</file>
+      <file>${PROJECT_ROOT}\savedFiles\savedParameters\savedParameterscoolProgress.mat</file>
     </fileset.resources>
     <fileset.package />
     <build-deliverables>

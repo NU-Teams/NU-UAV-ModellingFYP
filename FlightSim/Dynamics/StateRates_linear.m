@@ -12,7 +12,8 @@ X_k_13 = [X_k_12(1:3);
           X_k_12(4:6);
           quat;
           X_k_12(10:12)];
-   
+
+
 %% 3 velocities
     
     vel_dot = velocityRates(X_k_13, U_k, X_dot, AIRCRAFT, ENVIRONMENT);

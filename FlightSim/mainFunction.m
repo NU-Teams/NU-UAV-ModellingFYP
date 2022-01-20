@@ -1,36 +1,31 @@
-function output = mainFunction()
+function output = mainFunction(parameters)
 
 % TODO (PropForces):
 %   implement user input for propulsion axes.
-%   add the initial ltitude and longitude coordinates to the app.
+% add the initial altitude and longitude coordinates to the app.
 
 %% Setup
-clear
 close all
 clc
 
 addpath("FlightSim");
-addpath("FlightSim\CoordinateTransformation");
-addpath("FlightSim\Dynamics");
-addpath("FlightSim\Forces");
-addpath("FlightSim\LinearAnalysis");
+addpath("FlightSim/CoordinateTransformation");
+addpath("FlightSim/Dynamics");
+addpath("FlightSim/Forces");
+addpath("FlightSim/LinearAnalysis");
 
-addpath("FlightSim\Output");
-addpath("FlightSim\Output\data");
-addpath("FlightSim\Output\figures");
+addpath("FlightSim/Output");
+addpath("FlightSim/Output/data");
+addpath("FlightSim/Output/figures");
 
-addpath("FlightSim\Parameters");
-
-
-addpath("savedFiles");
-addpath("savedFiles\savedAircraft");
-addpath("savedFiles\Parameters");
-addpath("savedFiles\temp");
-addpath("savedFiles\savedAircraft_ProfilePhotos");
+addpath("FlightSim/Parameters");
 
 
-load("appParameters", 'aircraft', 'operation', 'environment', 'simulation');
-
+% Unpack
+aircraft    = parameters.aircraft;
+operation   = parameters.operation;
+environment = parameters.environment;
+simulation  = parameters.simulation;
 
 T = 0:simulation.timeStep:simulation.timeSpan;
 
@@ -40,7 +35,7 @@ T = 0:simulation.timeStep:simulation.timeSpan;
 [Xbar, Ubar] = Trim(aircraft, operation, environment);
 
 % Generate the Input Array
-[U, ~] = Controls(Xbar, Ubar, T, aircraft, operation, environment);
+U = (operation.manualControls(:,1:4))' + Ubar.*ones(4, length(operation.manualControls(:,1)));
 
 
 %% Eigen Analysis
@@ -48,7 +43,7 @@ T = 0:simulation.timeStep:simulation.timeSpan;
 [aircraft.A, aircraft.B] = Linearise(Xbar, Ubar, aircraft, environment);
 
 [~, ~, aircraft.Long.A, aircraft.Long.B]	= LongMatrixDecouple(aircraft.A, aircraft.B);
-[~, ~, aircraft.Lat.A, aircraft.Lat.B]      = LatMatrixDecouple(aircraft.A, aircraft.B);
+[~, ~, aircraft.Lat.A , aircraft.Lat.B ]    = LatMatrixDecouple(aircraft.A , aircraft.B);
 
 % compute eig vals/vectors of matrix A (eig and damp)
 [eigValues, eigVectors, eigDiagonal, natFreq, dampFactor] = eig_analysis(aircraft.A);
@@ -67,18 +62,19 @@ MilSpec = PlotMilSpec(Xbar, aircraft, environment);
 X0 = Xbar;
 
 % Linear Dynamics
-[X_lin, ~] = IntegrateLinearDynamics(T, X0, U, aircraft, environment);
+[X_lin, ~]          = IntegrateLinearDynamics(T, X0, U, aircraft, environment);
 
 % Non-Linear Integration
-[X_nl, ~] = IntegrateDynamics(X0, U, T, aircraft, environment);
+[X_nl, X_dot_nl]    = IntegrateDynamics(X0, U, T, aircraft, operation, environment);
 
 
-%% Plot States
+%% Pack to outpur
 
-output.Transient.T      = T;
-output.Transient.X_lin	= X_lin;
-output.Transient.X_nl	= X_nl;
-output.Transient.U      = U;
+output.Transient.T                  = T;
+output.Transient.X_lin              = X_lin;
+output.Transient.X_nl               = X_nl;
+output.Transient.X_dot_nl           = X_dot_nl;
+output.Transient.U                  = U;
 
 output.LinearAnalysis.A             = aircraft.A;
 output.LinearAnalysis.B             = aircraft.B;

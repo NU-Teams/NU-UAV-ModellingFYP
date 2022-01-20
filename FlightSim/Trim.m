@@ -16,8 +16,13 @@ g       = ENVIRONMENT.gravity;
 rho_sl  = ENVIRONMENT.Sealevel.density;
 m       = AIRCRAFT.Inertia.m;
 S       = AIRCRAFT.Geom.S;
-psi     = OPERATION.Trim.bearing;
-beta_0  = OPERATION.Trim.beta;
+delta_0 = OPERATION.Trim.bearing/deg;
+beta_0  = OPERATION.Trim.beta/deg;
+
+
+% todo: add climbing in the future:
+gamma   = 0;                        % aircraft is not climbing
+
 
 %% Initialisation 
 % Find the Equilibrium Point at the appropriate local 0-point
@@ -39,8 +44,26 @@ max_approx_attempts = 100;
 
 % Declare variables
 EA = zeros(3,max_approx_attempts);
-X = [0,0,0, 0,0,0, 0,0,0,0, 0,0,alt]'; 
-U = [0 0 0 0]';
+
+X = [0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     0;
+     alt];
+ 
+U = [0;
+     0;
+     0;
+     0];
+ 
 x_dot = zeros(length(X(:,1)),max_approx_attempts);
 
 
@@ -102,8 +125,8 @@ while error>=tol
         
 %% step 2: Set Angle-states we can easily solve
 
-    gamma   = 0;                        % aircraft is not climbing
     theta   = alpha + gamma;
+    psi     = delta_0-beta;
     
     soln    = func_lateral(beta);
     phi     = soln(1);

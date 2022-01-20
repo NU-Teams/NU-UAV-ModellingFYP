@@ -10,7 +10,7 @@
 % separated regarding axis. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [X_lin, X_dot_lin] = IntegrateLinearDynamics(T, x0_13, U, AIRCRAFT, ENVIRONMENT)
+function [X_lin, X_dot_lin] = IntegrateLinearDynamics(T, X0_13, U, AIRCRAFT, ENVIRONMENT)
 
 %% UNPACK
 
@@ -21,11 +21,11 @@ VW_e = ENVIRONMENT.Wind.speed*[cos(ENVIRONMENT.Wind.bearing);
 
 % Define first arugument of the answer as the intial conditions
 
-CHI0                = Q2E(x0_13);
-x0_12               = [x0_13(1:3);
-                       x0_13(4:6);
+CHI0                = Q2E(X0_13);
+x0_12               = [X0_13(1:3);
+                       X0_13(4:6);
                        CHI0;
-                       x0_13(11:13)];
+                       X0_13(11:13)];
 
 X_dot_lin           = zeros(12,length(T));
 
@@ -36,6 +36,9 @@ B                   = AIRCRAFT.B;
 
 X_lin(:,1)          = X_tilde;
 U                   = U_tilde;
+
+Ceb0 = (DCM(X0_13))^-1;
+
 
 for i = 2:length(T)
     DT = T(i) - T(i-1);
@@ -48,7 +51,7 @@ for i = 2:length(T)
 
     
     % Fix the x state not integrating the offset values
-    X_lin(10:11,i)	= X_lin(10:11,i) + (x0_12(1:2)-VW_e(1:2))*DT;
+    X_lin(10:12,i)	= X_lin(10:12,i) + (Ceb0*x0_12(1:3)-VW_e)*DT;
     
     % Log the differentials
     X_dot_lin(:,i)	= (X_lin(:,i) - X_lin(:,i-1))/DT;

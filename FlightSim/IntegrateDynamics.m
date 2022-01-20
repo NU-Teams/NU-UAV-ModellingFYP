@@ -16,7 +16,7 @@
 % Jason Iredale 03/05/2021 2120
 % Jason Iredale 13/05/2021 1823
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [X_output, X_dot] = IntegrateDynamics(X_initial, U, T, AIRCRAFT, ENVIRONMENT)
+function [X_output, X_dot] = IntegrateDynamics(X_initial, U, T, AIRCRAFT, OPERATION, ENVIRONMENT)
 
 % Find memory for the magnitude of the quaternions. they should always be
 % equal to (or close to) 1.
@@ -25,12 +25,16 @@ X_dot               = zeros(13,length(T));
 
 X                   = zeros(13,length(T));
 
-% geo-coordinates data (todo: put the ic is the app.)
-geo(:, 1)           = [-32.890219*(pi/180); 151.702862*(pi/180); -X_initial(end)];
-R                   = 6371e+3;
-
 % Set the initial condition;
 X(:,1)              = X_initial;
+
+% geo-coordinates data
+
+delta0              = OPERATION.Trim.bearing*(pi/180);
+geo(:, 1)           = [OPERATION.latitude0*(pi/180);
+                       OPERATION.longitude0*(pi/180);
+                       delta0];
+
 
 % Begin the Integration Method
 for k = 2:length(T)
@@ -55,10 +59,24 @@ for k = 2:length(T)
     
     X_dot(:,k)      = (X(:,k)-X(:,k-1))/DT;
     
-    % EARTH coordinates - used for mapping (todo: make this a dynamic eqn?)
-    geo(3, k)       = -(X(end,   k) - X(end  , k-1))                                  + geo(3, k-1);
-    geo(1, k)       =  (X(end-2, k) - X(end-2, k-1))/( R + geo(3, k)                ) + geo(1, k-1);
-    geo(2, k)       =  (X(end-1, k) - X(end-1, k-1))/((R + geo(3, k))*cos(geo(1, k))) + geo(2, k-1);
+    % EARTH coordinates - used for mapping
+    % distance
+    x               = X(11, k)-X(11, k-1);
+    y               = X(12, k)-X(12, k-1);
+    distance        = sqrt(x^2 + y^2);
+    
+    % change in heading, delta = psi - (-beta)
+    EUL_k           = Q2E(X(:,k));
+    EUL_k_1         = Q2E(X(:,k-1));
+    [~, beta_k, ~]	= AeroAngles(X(:,k)); 
+    [~, beta_k_1, ~]= AeroAngles(X(:,k-1));
+    d_delta         = (EUL_k(3)+beta_k) -  (EUL_k_1(3)+beta_k_1);
+    geo(3, k-1)     = geo(3, k-1) + d_delta;
+    
+    % using Vincenty's formula to turn path along a great circle into
+    % latitude longitue coodinates. May be overpowered but its the only
+    % thing i found online - jason.
+    geo(:,k)        = VincentyFormula(geo(:, k-1), distance);
 
 end
 
@@ -70,7 +88,7 @@ aerodynamicAngles   = [V; beta; alpha];
 EUL                 = Q2E(X);
 
 % latitude longitude coordinates
-geo(1:2, :)         = geo(1:2, :)*180/pi
+geo(1:2, :)         = geo(1:2, :)*180/pi;
 
 X_output = [X(1:3,:);           % body velocities
             X(4:6,:);           % rotation rates
@@ -78,4 +96,5 @@ X_output = [X(1:3,:);           % body velocities
             X(11:13,:);         % position (LVLH)
             aerodynamicAngles;  % different kind of velocities
             geo];               % geo coordinates
+
 end
