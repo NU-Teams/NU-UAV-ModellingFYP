@@ -64,9 +64,8 @@ if strcmp(PropObject, 'Electric')
     
     % propeller
     J = VT./(n*D);
-    J_poly = [J.^0; J.^1; J.^2; J.^3]; 
-    CT = CT_coeff*J_poly;
-    CP = CP_coeff*J_poly;
+    CT = CT_coeff(1) + CT_coeff(2)*(J.^1) + CT_coeff(3)*(J.^2);
+    CP = CP_coeff(4)*(J.^3) + CP_coeff(3)*(J.^2) + CP_coeff(2)*(J.^1) + CP_coeff(1);
     CQ = CP/(2*pi);
     eta_p = J*CT/CP;
     

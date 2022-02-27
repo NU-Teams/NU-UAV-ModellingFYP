@@ -8,16 +8,15 @@ function [X_output, U_output] = Trim(AIRCRAFT, OPERATION, ENVIRONMENT)
 kts = 1.944;
 deg = 180/pi;
 
-
 %% Unpack input
-VT      = OPERATION.Trim.airspeed/kts;
+VT      = OPERATION.Trim.airspeed;
 alt     = OPERATION.Trim.altitude;
 g       = ENVIRONMENT.gravity;
 rho_sl  = ENVIRONMENT.Sealevel.density;
 m       = AIRCRAFT.Inertia.m;
 S       = AIRCRAFT.Geom.S;
-delta_0 = OPERATION.Trim.bearing/deg;
-beta_0  = OPERATION.Trim.beta/deg;
+azimuth_0= OPERATION.Trim.bearing;
+beta_0  = OPERATION.Trim.beta;
 
 
 % todo: add climbing in the future:
@@ -60,6 +59,7 @@ X = [0;
      alt];
  
 U = [0;
+     0;
      0;
      0;
      0];
@@ -110,6 +110,7 @@ while error>=tol
     alpha   = longParams(1,k);
     delta_T = longParams(2,k);
     delta_e = longParams(3,k);
+    delta_f = 0;
 
     beta = beta_0;
     
@@ -126,7 +127,7 @@ while error>=tol
 %% step 2: Set Angle-states we can easily solve
 
     theta   = alpha + gamma;
-    psi     = delta_0-beta;
+    psi     = azimuth_0-beta;
     
     soln    = func_lateral(beta);
     phi     = soln(1);
@@ -136,7 +137,8 @@ while error>=tol
     U(:,k) = [delta_T;
               delta_e;
               delta_a;
-              delta_r];
+              delta_r;
+              delta_f];
 
     EA(:,k) = [phi;
                theta;
@@ -157,7 +159,7 @@ while error>=tol
     % Solve the Dynamic Equation
     x_dot(:,k) = StateRates(X(:,k), U(:,k), zeros(13,1), AIRCRAFT, ENVIRONMENT);
     
-    xLon_dot(:,k) = (x_dot([1 3 5], k))';
+    xLon_dot(:,k) = x_dot([1 3 5], k);
     
     
 %% step 4: Finding the Jacobian
@@ -176,7 +178,9 @@ while error>=tol
             
         % recalculate any state dependent on alpha
         C_ba = air2body(beta, longParams_nudge(1));
-        X_nudge(1:3) = C_ba*[VT; 0; 0];         % u
+        X_nudge(1:3) = C_ba*[VT;
+                              0;
+                              0];
         
         U_nudge(1) = longParams_nudge(2);      	% delta_T
         U_nudge(2) = longParams_nudge(3);       % delta_e

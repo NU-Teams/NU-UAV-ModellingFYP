@@ -1,8 +1,10 @@
 function output = mainFunction(parameters)
 
-% TODO (PropForces):
-%   implement user input for propulsion axes.
-% add the initial altitude and longitude coordinates to the app.
+% TODO:
+% wrap in current draw / fuel into dynamics
+% display delta_T, power and omega
+% allow blackbox data for aerodynamic coefficients
+% propeller inertia?
 
 %% Setup
 close all
@@ -13,10 +15,6 @@ addpath("FlightSim/CoordinateTransformation");
 addpath("FlightSim/Dynamics");
 addpath("FlightSim/Forces");
 addpath("FlightSim/LinearAnalysis");
-
-addpath("FlightSim/Output");
-addpath("FlightSim/Output/data");
-addpath("FlightSim/Output/figures");
 
 addpath("FlightSim/Parameters");
 
@@ -29,14 +27,31 @@ simulation  = parameters.simulation;
 
 T = 0:simulation.timeStep:simulation.timeSpan;
 
+% convert input parameters to SI
+kts = 1.944;
+deg = 180/pi;
+ft  = 3.28084;
+
+aircraft.CtrlLim.Lwr(2:5)       = aircraft.CtrlLim.Lwr(2:5)/deg;
+aircraft.CtrlLim.Upr(2:5)       = aircraft.CtrlLim.Upr(2:5)/deg;
+environment.Wind.speed          = environment.Wind.speed/kts;
+environment.Wind.bearing        = environment.Wind.bearing/deg;
+operation.Trim.airspeed         = operation.Trim.airspeed/kts;
+operation.Trim.bearing          = operation.Trim.bearing/deg;
+operation.Trim.beta             = operation.Trim.beta/deg;
+operation.Trim.altitude         = operation.Trim.altitude/(-ft);
+operation.latitude0             = operation.latitude0/deg;
+operation.longitude0            = operation.longitude0/deg;
+operation.manualControls(2:5,:) = operation.manualControls(2:5,:)/deg;
+
+
 %% Configuration
 
 % Find the Trim States
 [Xbar, Ubar] = Trim(aircraft, operation, environment);
 
 % Generate the Input Array
-U = (operation.manualControls(:,1:4))' + Ubar.*ones(4, length(operation.manualControls(:,1)));
-
+U = controls(aircraft, operation, Ubar);
 
 %% Eigen Analysis
 
@@ -68,7 +83,7 @@ X0 = Xbar;
 [X_nl, X_dot_nl]    = IntegrateDynamics(X0, U, T, aircraft, operation, environment);
 
 
-%% Pack to outpur
+%% Pack to output
 
 output.Transient.T                  = T;
 output.Transient.X_lin              = X_lin;

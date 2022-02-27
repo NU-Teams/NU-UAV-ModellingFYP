@@ -10,8 +10,8 @@ c = AIRCRAFT.Geom.c;
 b = AIRCRAFT.Geom.b;
 
 dragCoefficients        = [AIRCRAFT.Aero.CDo AIRCRAFT.Aero.k];
-liftCoefficients        = [AIRCRAFT.Aero.CLo AIRCRAFT.Aero.CLa AIRCRAFT.Aero.CLad AIRCRAFT.Aero.CLq AIRCRAFT.Aero.CLde];
-pitchmomentCoefficients	= [AIRCRAFT.Aero.Cmo AIRCRAFT.Aero.Cma AIRCRAFT.Aero.Cmad AIRCRAFT.Aero.Cmq AIRCRAFT.Aero.Cmde];
+liftCoefficients        = [AIRCRAFT.Aero.CLo AIRCRAFT.Aero.CLa AIRCRAFT.Aero.CLad AIRCRAFT.Aero.CLq AIRCRAFT.Aero.CLde AIRCRAFT.Aero.CLdf];
+pitchmomentCoefficients	= [AIRCRAFT.Aero.Cmo AIRCRAFT.Aero.Cma AIRCRAFT.Aero.Cmad AIRCRAFT.Aero.Cmq AIRCRAFT.Aero.Cmde AIRCRAFT.Aero.Cmdf];
 
 sideforceCoefficients	= [AIRCRAFT.Aero.CYo AIRCRAFT.Aero.CYb AIRCRAFT.Aero.CYbd AIRCRAFT.Aero.CYp AIRCRAFT.Aero.CYr AIRCRAFT.Aero.CYda AIRCRAFT.Aero.CYdr];
 rollmomentCoefficients	= [AIRCRAFT.Aero.Clo AIRCRAFT.Aero.Clb AIRCRAFT.Aero.Clbd AIRCRAFT.Aero.Clp AIRCRAFT.Aero.Clr AIRCRAFT.Aero.Clda AIRCRAFT.Aero.Cldr];
@@ -43,9 +43,22 @@ r_hat = r*b./(2*VT);
 delta_e = U_k(2); % Elevator Deflection 
 delta_a = U_k(3); % Aileron Deflection 
 delta_r = U_k(4); % Rudder Deflection
+delta_f = U_k(5); % flaps Deflection
 
-longVariables = [1; alpha; alpha_dot_hat; q_hat; delta_e];
-latVariables  = [1; beta; beta_dot_hat; p_hat; r_hat; delta_a; delta_r];
+longVariables = [1;
+                 alpha;
+                 alpha_dot_hat;
+                 q_hat;
+                 delta_e;
+                 delta_f];
+             
+latVariables  = [1;
+                 beta;
+                 beta_dot_hat;
+                 p_hat;
+                 r_hat;
+                 delta_a;
+                 delta_r];
 
 % Lift Coefficient
 CL = liftCoefficients*longVariables;

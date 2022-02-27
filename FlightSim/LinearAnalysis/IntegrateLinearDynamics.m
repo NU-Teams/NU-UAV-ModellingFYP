@@ -30,7 +30,7 @@ x0_12               = [X0_13(1:3);
 X_dot_lin           = zeros(12,length(T));
 
 X_tilde             = zeros(12,1);
-U_tilde             = U - U(:,1).*ones(4,length(T));
+U_tilde             = U - U(:,1).*ones(5,length(T));
 A                   = AIRCRAFT.A;
 B                   = AIRCRAFT.B;
 

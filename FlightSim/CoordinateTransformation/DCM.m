@@ -1,16 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CosineMatrix = DCM(X_k)
 % Finds the body to earth and vice-verse transformation matrix for a state.
-%
-% CALLED FUNCTIONS:
-%   n/a
-%
-% OUTPUTS:
-% CosineMatrix for both Cbe and Ceb
-%
-% Jason Iredale,  30/04/2021
-% Inga Leinasars, 02/05/2021 
-% Jason Iredale,  03/05/2021 0937
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function C_be = DCM(X_k)
 %% CODE

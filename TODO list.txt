@@ -3,4 +3,14 @@ Bunch of updates I want to give the simulator to make it simpler, more versatile
 
 1) formalise the math around the CoG data, and how it changes the aerodynamic coefficients. right now it's based only on a specific aircraft and not generalised.
 
+2) add AERO2000 code
+	- Climb Performance
+	- Turn performance
+	- types of propulsion
+	- range, endurance fuel fraction
+
+3) add AERO3400 code
+	- propellors
+	- swap engine analysis for battery and DC-outrunners
+
 

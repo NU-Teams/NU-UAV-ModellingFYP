@@ -8,13 +8,6 @@
 %
 % X_initial can be a row or column vector. U must have inputs as rows and
 % time as columns. T can be a row or coumn vector.
-%
-% CALLED FUNCTIONS:
-% StateRates.m
-%
-% Jason Iredale 30/04/2021
-% Jason Iredale 03/05/2021 2120
-% Jason Iredale 13/05/2021 1823
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [X_output, X_dot] = IntegrateDynamics(X_initial, U, T, AIRCRAFT, OPERATION, ENVIRONMENT)
 
@@ -22,18 +15,21 @@ function [X_output, X_dot] = IntegrateDynamics(X_initial, U, T, AIRCRAFT, OPERAT
 % equal to (or close to) 1.
 
 X_dot               = zeros(13,length(T));
+X_dot(:, 2:end) = NaN;
 
 X                   = zeros(13,length(T));
+X(:, 2:end) = NaN;
 
 % Set the initial condition;
 X(:,1)              = X_initial;
 
 % geo-coordinates data
-
-delta0              = OPERATION.Trim.bearing*(pi/180);
-geo(:, 1)           = [OPERATION.latitude0*(pi/180);
-                       OPERATION.longitude0*(pi/180);
-                       delta0];
+geo                 = zeros(3, length(T));
+geo(:, 2:end) = NaN;
+azimuth0            = OPERATION.Trim.bearing;
+geo(:, 1)           = [OPERATION.latitude0;
+                       OPERATION.longitude0;
+                       azimuth0];
 
 
 % Begin the Integration Method
@@ -43,21 +39,19 @@ for k = 2:length(T)
     DT              = T(k)-T(k-1);
 
     % RK4 Terms
-    
-    %X_dot = zeros(13,1);
-    f1 = DT*StateRates(X(:,k-1),        U(:,k-1),X_dot(:,k), AIRCRAFT, ENVIRONMENT);
-    f2 = DT*StateRates(X(:,k-1)+0.5*f1,	U(:,k-1),X_dot(:,k), AIRCRAFT, ENVIRONMENT);
-    f3 = DT*StateRates(X(:,k-1)+0.5*f2,	U(:,k-1),X_dot(:,k), AIRCRAFT, ENVIRONMENT);
-    f4 = DT*StateRates(X(:,k-1)+f3,    	U(:,k-1),X_dot(:,k), AIRCRAFT, ENVIRONMENT);
-    
-    % Normalise the quaternions
-    quaternion      = X(7:10,k);
-    X(7:10,k)       = quaternion/norm(quaternion);
+    f1 = DT*StateRates(X(:,k-1),        U(:,k-1), X_dot(:,k-1), AIRCRAFT, ENVIRONMENT);
+    f2 = DT*StateRates(X(:,k-1)+0.5*f1,	U(:,k-1), X_dot(:,k-1), AIRCRAFT, ENVIRONMENT);
+    f3 = DT*StateRates(X(:,k-1)+0.5*f2,	U(:,k-1), X_dot(:,k-1), AIRCRAFT, ENVIRONMENT);
+    f4 = DT*StateRates(X(:,k-1)+f3,    	U(:,k-1), X_dot(:,k-1), AIRCRAFT, ENVIRONMENT);
     
     % Calculate Next-state
     X(:,k)          = X(:,k-1) + (1/6)*(f1+2*f2+2*f3+f4);
     
     X_dot(:,k)      = (X(:,k)-X(:,k-1))/DT;
+        
+    % Normalise the quaternions
+    quaternion      = X(7:10,k);
+    X(7:10,k)       = quaternion/norm(quaternion);
     
     % EARTH coordinates - used for mapping
     % distance
@@ -78,6 +72,11 @@ for k = 2:length(T)
     % thing i found online - jason.
     geo(:,k)        = VincentyFormula(geo(:, k-1), distance);
 
+    % Crash condiion: if the altitude is below sea level - end simulation
+    if (-X(13,k)) < 0
+        break        
+    end
+    
 end
 
 % Apppend VT, alpha and beta to the states array

@@ -20,7 +20,7 @@ b = AIRCRAFT.Geom.b;
 [~,Q] = FlowProperties(X_k, ENVIRONMENT);
 
 % Coefficients
-C = WindForces(X_k,U_k, X_dot, AIRCRAFT);
+C = WindForces(X_k, U_k, X_dot, AIRCRAFT);
 
 CD = C(1);
 CY = C(2);

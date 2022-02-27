@@ -13,7 +13,7 @@ Ixz = AIRCRAFT.Inertia.Ixz;
 [~, aero_M] = BodyForces(X_k, U_k, X_dot, AIRCRAFT, ENVIRONMENT);
 
 % Moments generated from the propulsion
-[~, propulsive_M] = PropForces(X_k, U_k, AIRCRAFT, ENVIRONMENT);
+[~, propulsive_M, ~] = PropForces(X_k, U_k, AIRCRAFT, ENVIRONMENT);
 
 
 %% initialisation of states & variables from input vectors

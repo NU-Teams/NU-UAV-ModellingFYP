@@ -1,33 +1,25 @@
 %PLOT Argand Diagram and Time Domain Response for analysis
 function argandDiagrams = PlotStability(T, AIRCRAFT)
 
+A = AIRCRAFT.A;
 
-for k = 1:2
-    
-    if k == 1
-        A = AIRCRAFT.Long.A;
-    elseif k == 2
-        A = AIRCRAFT.Lat.A;
-    end
+[U, LAMBDA] = eig(A);
 
-    [V, E] = eig(A);
-    
-    for coln = 1:5
+for coln = 1:12
 
-        for row = 1:5
+    for row = 1:12
 
-            lambda = E(coln, coln);
-            ic = V(row,coln);
-            lambdax = [0, real(ic)];
-            lambday = [0, imag(ic)];
+        lambda = LAMBDA(coln, coln);
+        initCond = U(row,coln);
+        lambdax = [0, real(initCond)];
+        lambday = [0, imag(initCond)];
 
-            result = ic*exp(lambda.*T);
+        result = initCond*exp(lambda.*T);
 
-            argandDiagrams(row, coln, k).lambda = [lambdax', lambday', 0*lambdax'];
-            argandDiagrams(row, coln, k).result = [real(result)', imag(result)' T'];
-            argandDiagrams(row, coln, k).lambdaEnd = [lambdax(2), lambday(2), 0*lambdax(2)];
+        argandDiagrams(row, coln).lambda	= [lambdax',        lambday',       0*lambdax'];
+        argandDiagrams(row, coln).result	= [real(result)',	imag(result)',  T'];
+        argandDiagrams(row, coln).lambdaEnd = [lambdax(2),      lambday(2),     0*lambdax(2)];
 
-        end
     end
 end
 

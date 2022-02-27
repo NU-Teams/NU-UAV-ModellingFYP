@@ -25,7 +25,7 @@ X_dot = StateRates_linear(X_bar_lin, U_bar, zeros(12,1), AIRCRAFT, ENVIRONMENT);
 %% step 3: Finding the Jacobian
 
 JacobA = zeros(12, 12);
-JacobB = zeros(12, 4);
+JacobB = zeros(12, 5);
 
 for stateA = 1:12
 
@@ -44,7 +44,7 @@ for stateA = 1:12
     JacobA(:,stateA) = (X_dot_nudge - X_dot) ./ (X_nudge(stateA) - X_bar_lin(stateA));
 end
 
-for stateB = 1:4
+for stateB = 1:5
 
     % re-Initialise Variables
     X_nudge = X_bar_lin;

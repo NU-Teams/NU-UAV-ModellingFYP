@@ -2,12 +2,6 @@
 % [density_ratio, dynamic_pressure] = FlowProperties(X_k)
 % Returns the density ratio for a given altitude and the dynamic pressure
 % for a TRUE airspeed
-%
-% CALLED FUNCTIONS:
-%   AeroAngles(X_k)
-%   
-% Jason Iredale, 30/04/2021
-% Jason Iredale, 7/05/2021 0110
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [densityRatio, dynamicPressure] = FlowProperties(X_k, ENVIRONMENT)
 %% CODE

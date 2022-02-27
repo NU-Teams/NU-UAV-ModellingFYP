@@ -101,10 +101,6 @@ for T_idx = T_idx:(1/(animation.FramesPerSecond*DT)):T_length
     % Estimate speeds (todo: we don't need to estimate)
     if T_idx > 1
         
-        % Estimate velocity
-        %Vel     = (X(T_idx,2:4)-X(T_idx-1,2:4))/(X(T_idx,1)-X(T_idx-1,1));
-        %rates	= (X(T_idx,5:7)-X(T_idx-1,5:7))/(X(T_idx,1)-X(T_idx-1,1));
-        
         % Set climb rate
         climbReader.ClimbRate       = convvel(-dz(T_idx),'m/s','ft/min');
         
@@ -145,7 +141,7 @@ for T_idx = T_idx:(1/(animation.FramesPerSecond*DT)):T_length
     lbl.Text = ['Time: ' num2str(t,'%06.2f') ' sec'];
     
     waitfor(func);
-    func.TotalElapsedTime
+    func.TotalElapsedTime;
 end
 
 end

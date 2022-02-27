@@ -19,13 +19,14 @@ T_A_10to5 = [1 0 0, 0 0 0, 0 0 0, 0;
 
 A_10 = (T_A_10to5')*A_5*T_A_10to5;
 
-% retains thrust and elevator
-T_B_4to2 = [1 0;
-            0 1;
-            0 0;
-            0 0];
+% retains thrust, elevator and flaps
+T_B_5to3 = [1 0 0;
+            0 1 0;
+            0 0 0;
+            0 0 0;
+            0 0 1];
 
-B_5 = T_A_12to5*B*T_B_4to2;
+B_5 = T_A_12to5*B*T_B_5to3;
 
-B_10 = (T_A_12to5')*B_5*(T_B_4to2');
+B_10 = (T_A_12to5')*B_5*(T_B_5to3');
 end

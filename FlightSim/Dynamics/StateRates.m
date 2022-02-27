@@ -22,6 +22,11 @@ function [X_dot] = StateRates(X_k, U_k, X_dot, AIRCRAFT, ENVIRONMENT)
 
     position_e_dot = positionRates(X_k, ENVIRONMENT);
     
+%% fuel
+
+    [~, ~, fuel_dot] = PropForces(X_k, U_k, AIRCRAFT, ENVIRONMENT);
+    % todo: wrap fuel consumption into this
+    
 %% STATE RATES VECTOR
     X_dot = [vel_dot;
              rotVel_dot;

@@ -99,9 +99,9 @@ for i = 1:4
     % dampRatio
     Class(i).Cat(2).SP.dampRatio.lvl(1).region = semilogXcircle((log10(2.0)-log10(0.30))/2, [(log10(2.0)+log10(0.30))/2, 2.40], 2.0, 1.8);
     %DR
-    Class(i).Cat(1).DR.lvl(1).zeta = 0.08;
-    Class(i).Cat(1).DR.lvl(1).zetaWn = 0.15;
-    Class(i).Cat(1).DR.lvl(1).Wn = 0.4;
+    Class(i).Cat(2).DR.lvl(1).zeta = 0.08;
+    Class(i).Cat(2).DR.lvl(1).zetaWn = 0.15;
+    Class(i).Cat(2).DR.lvl(1).Wn = 0.4;
     
     % Level 2
     Class(i).Cat(2).SP.Dndalpha.lvl(2).lwr.k = 0.200;
@@ -114,9 +114,9 @@ for i = 1:4
     % dampRatio
     Class(i).Cat(2).SP.dampRatio.lvl(2).region = semilogXcircle((log10(2.0)-log10(0.20))/2, [(log10(2.0)+log10(0.20))/2, 2.45], 2.3, 1.6);
     %DR
-    Class(i).Cat(1).DR.lvl(2).zeta = 0.02;
-    Class(i).Cat(1).DR.lvl(2).zetaWn = 0.05;
-    Class(i).Cat(1).DR.lvl(2).Wn = 0.4;
+    Class(i).Cat(2).DR.lvl(2).zeta = 0.02;
+    Class(i).Cat(2).DR.lvl(2).zetaWn = 0.05;
+    Class(i).Cat(2).DR.lvl(2).Wn = 0.4;
     
     % Level 3
     Class(i).Cat(2).SP.Dndalpha.lvl(3).lwr.k = 0.200;
@@ -129,9 +129,9 @@ for i = 1:4
     % dampRatio
     Class(i).Cat(2).SP.dampRatio.lvl(3).region = semilogXcircle((log10(3.0)-log10(0.15))/2, [(log10(3.0)+log10(0.15))/2, 2.50], 2.3, 1.6);
     %DR
-    Class(i).Cat(1).DR.lvl(3).zeta = 0;
-    Class(i).Cat(1).DR.lvl(3).zetaWn = 0;
-    Class(i).Cat(1).DR.lvl(3).Wn = 0.4;
+    Class(i).Cat(2).DR.lvl(3).zeta = 0;
+    Class(i).Cat(2).DR.lvl(3).zetaWn = 0;
+    Class(i).Cat(2).DR.lvl(3).Wn = 0.4;
     
     
     % Category C
@@ -147,9 +147,9 @@ for i = 1:4
     % dampRatio
     Class(i).Cat(3).SP.dampRatio.lvl(1).region = semilogXcircle((log10(1.3)-log10(0.35))/2, [(log10(1.3)+log10(0.35))/2, 2.40], 2.0, 1.8);
     %DR
-    Class(i).Cat(1).DR.lvl(1).zeta = 0.08;
-    Class(i).Cat(1).DR.lvl(1).zetaWn = 0.15;
-    Class(i).Cat(1).DR.lvl(1).Wn = 1;
+    Class(i).Cat(3).DR.lvl(1).zeta = 0.08;
+    Class(i).Cat(3).DR.lvl(1).zetaWn = 0.15;
+    Class(i).Cat(3).DR.lvl(1).Wn = 1;
     
     % Level 2
     Class(i).Cat(3).SP.Dndalpha.lvl(2).lwr.k = 0.320;
@@ -162,9 +162,9 @@ for i = 1:4
     % dampRatio
     Class(i).Cat(3).SP.dampRatio.lvl(2).region = semilogXcircle((log10(2.0)-log10(0.25))/2, [(log10(2.0)+log10(0.25))/2, 2.45], 2.3, 1.6);
     %DR
-    Class(i).Cat(1).DR.lvl(2).zeta = 0.02;
-    Class(i).Cat(1).DR.lvl(2).zetaWn = 0.05;
-    Class(i).Cat(1).DR.lvl(2).Wn = 0.4;
+    Class(i).Cat(3).DR.lvl(2).zeta = 0.02;
+    Class(i).Cat(3).DR.lvl(2).zetaWn = 0.05;
+    Class(i).Cat(3).DR.lvl(2).Wn = 0.4;
     
     % Level 3
     Class(i).Cat(3).SP.Dndalpha.lvl(3).lwr.k = 0.320;
@@ -177,9 +177,9 @@ for i = 1:4
     % dampRatio
     Class(i).Cat(3).SP.dampRatio.lvl(3).region = semilogXcircle((log10(3.0)-log10(0.15))/2, [(log10(3.0)+log10(0.15))/2, 2.50], 2.3, 1.6);
     %DR
-    Class(i).Cat(1).DR.lvl(3).zeta = 0;
-    Class(i).Cat(1).DR.lvl(3).zetaWn = 0;
-    Class(i).Cat(1).DR.lvl(3).Wn = 0.4;
+    Class(i).Cat(3).DR.lvl(3).zeta = 0;
+    Class(i).Cat(3).DR.lvl(3).zetaWn = 0;
+    Class(i).Cat(3).DR.lvl(3).Wn = 0.4;
 
 end
 

@@ -37,6 +37,9 @@ animation = Aero.Animation;
 %   pa24-250_blue.ac
 %   redwedge.ac
 %   testrocket.ac
+
+
+
 animation.createBody(modelName, 'Ac3d');
 
 % flight data
